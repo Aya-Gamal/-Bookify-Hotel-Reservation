@@ -50,7 +50,7 @@ Mohamed Khaled Ali
 
 ---
 
-## Key Performance Indicators(KPIs
+## Key Performance Indicators(KPIs)
 
 
 ---
