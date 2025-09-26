@@ -13,6 +13,7 @@ Reem Mohamed Abdelmonaim
 Aya Gamal Hanfe	
 Mohamed Gamal Ahmed	
 Mohamed Khaled Ali 
+
 ---
 
 ## Work Plan
@@ -35,7 +36,7 @@ Mohamed Khaled Ali
 
 ---
 
-##Roles and Responsibilities
+## Roles and Responsibilities
 
 
 | Name                                | Role                                |
@@ -49,23 +50,23 @@ Mohamed Khaled Ali
 
 ---
 
-##Key Performance Indicators(KPIs
+## Key Performance Indicators(KPIs
 
 
 ---
 
-##Instructor
+## Instructor
 Eng Hesham Mohamed
 
 ---
 
-##Project Files
+## Project Files
 
 
 ---
 
 
-##License
+## License
 
 
 
