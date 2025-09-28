@@ -23,7 +23,7 @@ namespace Bookify.Data.Models
         public decimal TotalPrice { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;  // the date when the booking was created.
-
+        public Payment Payment { get; set; }
         public BookingStatus Status { get; set; } = BookingStatus.Pending;
     }
     public enum BookingStatus

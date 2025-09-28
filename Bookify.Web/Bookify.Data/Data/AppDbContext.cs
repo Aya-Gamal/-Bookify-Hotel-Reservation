@@ -17,6 +17,7 @@ namespace Bookify.Data.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Payment> Payments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,6 +46,23 @@ namespace Bookify.Data.Data
                    .OnDelete(DeleteBehavior.Restrict);
 
 
+            // Booking → Payment (1-to-1)
+            builder.Entity<Payment>()
+           .HasOne(p => p.Booking)
+           .WithOne(b => b.Payment)
+           .HasForeignKey<Payment>(p => p.BookingId)
+           .OnDelete(DeleteBehavior.Cascade); 
+
+
+            // Store enums as strings
+            builder.Entity<Booking>()
+            .Property(b => b.Status)
+            .HasConversion<string>();
+
+            builder.Entity<Payment>()
+            .Property(p => p.Status)
+            .HasConversion<string>();
+
             // Decimal precision fixes
             builder.Entity<Booking>()
                 .Property(b => b.TotalPrice)
@@ -53,6 +71,8 @@ namespace Bookify.Data.Data
             builder.Entity<RoomType>()
                 .Property(rt => rt.PricePerNight)
                 .HasPrecision(18, 2);
+
+
 
 
 
