@@ -12,6 +12,7 @@ namespace Bookify.Services.Generic
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
         AppDbContext dbContext;
         DbSet<T> dbSet;
 
