@@ -46,28 +46,44 @@ namespace Bookify.Services.Generic
         public async Task<Response> Add(T entity)
         {
             await dbSet.AddAsync(entity);
-            await dbContext.SaveChangesAsync();
+            var result = await SaveChangesAsync();
+            if (result.Error)
+            {
+                return Response.Fail(result.Message);
+            }
             return Response.OK();
         }
 
         public async Task<Response> Add(IEnumerable<T> entities)
         {
             await dbSet.AddRangeAsync(entities);
-            await dbContext.SaveChangesAsync();
+            var result = await SaveChangesAsync();
+            if (result.Error)
+            {
+                return Response.Fail(result.Message);
+            }
             return Response.OK();
         }
 
         public async Task<Response> Delete(T entity)
         {
             dbSet.Remove(entity);
-            await dbContext.SaveChangesAsync();
+            var result = await SaveChangesAsync();
+            if (result.Error)
+            {
+                return Response.Fail(result.Message);
+            }
             return Response.OK();
         }
 
         public async Task<Response> Delete(IEnumerable<T> entities)
         {
             dbSet.RemoveRange(entities);
-            await dbContext.SaveChangesAsync();
+            var result = await SaveChangesAsync();
+            if (result.Error)
+            {
+                return Response.Fail(result.Message);
+            }
             return Response.OK();
         }
 
@@ -104,14 +120,22 @@ namespace Bookify.Services.Generic
         public async Task<Response> Update(T entity)
         {
             dbSet.Update(entity);
-            await dbContext.SaveChangesAsync();
+            var result = await SaveChangesAsync();
+            if (result.Error)
+            {
+                return Response.Fail(result.Message);
+            }
             return Response.OK();
         }
 
         public async Task<Response> Update(IEnumerable<T> entities)
         {
             dbSet.UpdateRange(entities);
-            await dbContext.SaveChangesAsync();
+            var result = await SaveChangesAsync();
+            if (result.Error)
+            {
+                return Response.Fail(result.Message);
+            }
             return Response.OK();
         }
     }
