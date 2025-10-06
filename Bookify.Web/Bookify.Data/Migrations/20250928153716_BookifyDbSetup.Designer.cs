@@ -4,6 +4,7 @@ using Bookify.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookify.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250928153716_BookifyDbSetup")]
+    partial class BookifyDbSetup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,9 +45,8 @@ namespace Bookify.Data.Migrations
                     b.Property<int>("RoomId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
                         .HasPrecision(18, 2)
@@ -61,45 +63,6 @@ namespace Bookify.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Bookings");
-                });
-
-            modelBuilder.Entity("Bookify.Data.Models.Payment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("PaymentDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PaymentMethod")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TransactionId")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookingId")
-                        .IsUnique();
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("Bookify.Data.Models.Room", b =>
@@ -373,17 +336,6 @@ namespace Bookify.Data.Migrations
                     b.Navigation("Room");
                 });
 
-            modelBuilder.Entity("Bookify.Data.Models.Payment", b =>
-                {
-                    b.HasOne("Bookify.Data.Models.Booking", "Booking")
-                        .WithOne("Payment")
-                        .HasForeignKey("Bookify.Data.Models.Payment", "BookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Booking");
-                });
-
             modelBuilder.Entity("Bookify.Data.Models.Room", b =>
                 {
                     b.HasOne("Bookify.Data.Models.RoomType", "RoomType")
@@ -443,12 +395,6 @@ namespace Bookify.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Bookify.Data.Models.Booking", b =>
-                {
-                    b.Navigation("Payment")
                         .IsRequired();
                 });
 
