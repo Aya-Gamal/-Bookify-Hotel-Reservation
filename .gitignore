@@ -33,7 +33,7 @@ packages/
 *.nuget.targets
 
 ## Publish output
-wwwroot/
+#wwwroot/
 project.lock.json
 project.fragment.lock.json
 
