@@ -33,9 +33,24 @@ namespace Bookify.Services.ModelsRepos
             return await genericRepo.FindAll(x => x.IsAvailable && x.RoomTypeId == roomType.Id);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetRoomsWithReservations()
+        public async Task<Response<IEnumerable<Room>>> GetAvailableRoomsByDate(DateTime checkIn, DateTime checkOut)
         {
-            return await genericRepo.FindAll(x => !(x.IsAvailable));
+            var bookedRoomIds = await dbContext.Bookings
+                .Where(b => b.Status != BookingStatus.Cancelled &&
+                            checkIn < b.CheckOutDate &&
+                            checkOut > b.CheckInDate)
+                .Select(b => b.RoomId)
+                .ToListAsync();
+
+            var availableRooms = await dbContext.Rooms
+                .Include(r => r.RoomType)
+                .Where(r => !bookedRoomIds.Contains(r.Id) && r.IsAvailable)
+                .GroupBy(r => r.Id)   
+                .Select(g => g.First())
+                .ToListAsync();
+
+            return Response<IEnumerable<Room>>.Ok(availableRooms);
         }
+
     }
 }

@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Bookify.Data.Models.Room>
+
+<div class="breadcrumb-section">
+    <div class="container"> 
+        <div class="row"> 
+            <div class="col-lg-12"> 
+                <div class="breadcrumb-text"> 
+                    <h2>Available Rooms</h2> 
+                      </div>
+                      </div> 
+                    </div> 
+                    </div> 
+                    </div>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+else if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var room in Model)
+        {
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100">
+                    <img src="~/images/room/room-@(room.RoomTypeId).jpg"
+                         onerror="this.src='~/images/logo.png';"
+                         class="card-img-top"
+                         alt="Room Image" />
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@room.RoomType?.Name (Room: @room.RoomNumber)</h5>
+                        <p class="card-text">@room.RoomType?.Description</p>
+                        <p class="card-text"><strong>Price:</strong> @room.RoomType?.PricePerNight.ToString("C") / night</p>
+                        <p class="card-text"><strong>Status:</strong> @(room.IsAvailable ? "Available" : "Booked")</p>
+                        <a asp-controller="Booking" asp-action="Book" asp-route-id="@room.Id" class="btn btn-primary mt-auto">Book Now</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-info text-center">
+        No available rooms found for the selected dates.
+    </div>
+}
+

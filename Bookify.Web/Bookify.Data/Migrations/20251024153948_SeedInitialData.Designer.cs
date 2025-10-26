@@ -4,6 +4,7 @@ using Bookify.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookify.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251024153948_SeedInitialData")]
+    partial class SeedInitialData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -145,29 +148,15 @@ namespace Bookify.Data.Migrations
                         new
                         {
                             Id = 3,
-                            IsAvailable = true,
+                            IsAvailable = false,
                             RoomNumber = "201",
                             RoomTypeId = 2
                         },
                         new
                         {
                             Id = 4,
-                            IsAvailable = false,
-                            RoomNumber = "202",
-                            RoomTypeId = 2
-                        },
-                        new
-                        {
-                            Id = 5,
                             IsAvailable = true,
                             RoomNumber = "301",
-                            RoomTypeId = 3
-                        },
-                        new
-                        {
-                            Id = 6,
-                            IsAvailable = false,
-                            RoomNumber = "302",
                             RoomTypeId = 3
                         });
                 });
