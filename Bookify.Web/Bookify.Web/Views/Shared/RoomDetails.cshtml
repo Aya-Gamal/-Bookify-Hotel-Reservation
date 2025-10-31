@@ -1,0 +1,39 @@
+﻿@model Bookify.Data.Models.Room
+
+@{
+    ViewData["Title"] = "Room Details";
+}
+
+<section class="rooms-section spad">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="room-item shadow-lg rounded-4 overflow-hidden">
+                    <img src="~/images/room/room-@(Model.Id).jpg" alt="@Model.RoomType.Name" class="img-fluid" />
+
+                    <div class="ri-text p-4">
+                        <h4 class="text-primary">@Model.RoomType.Name</h4>
+                        <h3>@Model.RoomType.PricePerNight $ <span>/Per night</span></h3>
+                        <p class="text-muted">@Model.RoomType.Description</p>
+
+                        <p><strong>Room Number:</strong> @Model.RoomNumber</p>
+                        <p>
+                            <strong>Status:</strong>
+                            <span class="@(Model.IsAvailable ? "text-success" : "text-danger")">
+                                @(Model.IsAvailable ? "Available" : "Booked")
+                            </span>
+                        </p>
+
+                        <div class="mt-4 d-flex justify-content-between">
+                            <a href="/Room/Rooms" class="btn btn-outline-secondary px-4">← Back to Rooms</a>
+                            <a href="/Booking/Create/@Model.Id" class="btn btn-primary px-4">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- مسافة عشان الفوتر -->
+<div style="margin-bottom: 60px;"></div>

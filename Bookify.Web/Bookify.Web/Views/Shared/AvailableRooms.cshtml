@@ -21,17 +21,17 @@ else if (Model != null && Model.Any())
         @foreach (var room in Model)
         {
             <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
+                <div class="room-item">
                     <img src="~/images/room/room-@(room.RoomTypeId).jpg"
                          onerror="this.src='~/images/logo.png';"
                          class="card-img-top"
                          alt="Room Image" />
-                    <div class="card-body d-flex flex-column">
+                    <div class="ri-text">
                         <h5 class="card-title">@room.RoomType?.Name (Room: @room.RoomNumber)</h5>
                         <p class="card-text">@room.RoomType?.Description</p>
                         <p class="card-text"><strong>Price:</strong> @room.RoomType?.PricePerNight.ToString("C") / night</p>
                         <p class="card-text"><strong>Status:</strong> @(room.IsAvailable ? "Available" : "Booked")</p>
-                        <a asp-controller="Booking" asp-action="Book" asp-route-id="@room.Id" class="btn btn-primary mt-auto">Book Now</a>
+                        <a asp-controller="Booking" asp-action="Book" asp-route-id="@room.Id" class="primary-btn">Book Now</a>
                     </div>
                 </div>
             </div>
