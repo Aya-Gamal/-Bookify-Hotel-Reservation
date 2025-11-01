@@ -40,7 +40,7 @@ namespace Bookify.Services.ModelsRepos
                 .Include(r => r.RoomType)
                 .ToListAsync();
 
-            return Response<IEnumerable<Room>>.Ok(rooms);
+            return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
         }
 
 
