@@ -1,6 +1,7 @@
 ﻿using Bookify.Data.Data;
 using Bookify.Data.Models;
 using Bookify.Services.Generic;
+using Bookify.Services.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,17 +24,17 @@ namespace Bookify.Services.ModelsRepos
             genericRepo = new(dbContext);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetRoomsWithoutReservations()
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetRoomsWithoutReservations()
         {
             return await genericRepo.FindAll(x => x.IsAvailable);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetRoomsWithoutReservations(RoomType roomType)
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetRoomsWithoutReservations(RoomType roomType)
         {
             return await genericRepo.FindAll(x => x.IsAvailable && x.RoomTypeId == roomType.Id);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetRoomsWithReservations()
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetRoomsWithReservations()
         {
             return await genericRepo.FindAll(x => !(x.IsAvailable));
         }
