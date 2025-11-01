@@ -1,0 +1,67 @@
+﻿
+<!-- Offcanvas Menu Section Begin -->
+<div class="offcanvas-menu-overlay"></div>
+<div class="canvas-open">
+    <i class="icon_menu"></i>
+</div>
+<div class="offcanvas-menu-wrapper">
+    <div class="canvas-close">
+        <i class="icon_close"></i>
+    </div>
+    <div class="header-configure-area">
+    </div>
+    <nav class="mainmenu mobile-menu">
+        <ul>
+            <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li><a asp-controller="Room" asp-action="Rooms">Rooms</a></li>
+            <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
+            <li><a asp-controller="Contact" asp-action="Contact">Contact</a></li>
+            <li><a asp-controller="Login" asp-action="Login">Login</a></li>
+
+        </ul>
+    </nav>
+    <div id="mobile-menu-wrap"></div>
+    <div class="top-social">
+        <a href="#"><i class="fa fa-facebook"></i></a>
+        <a href="#"><i class="fa fa-twitter"></i></a>
+        <a href="#"><i class="fa fa-tripadvisor"></i></a>
+        <a href="#"><i class="fa fa-instagram"></i></a>
+    </div>
+    <ul class="top-widget">
+        <li><i class="fa fa-phone"></i> (12) 345 67890</li>
+    </ul>
+</div>
+<!-- Offcanvas Menu Section End -->
+<!-- Header Section Begin -->
+<header class="header-section">
+    <div class="menu-item">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-2 d-flex justify-content-start">
+                    <div class="logo" >
+                        <a asp-controller="Home" asp-action="Index">
+                            <img src="~/images/logo.png" alt="logo" style="width:250px; height:auto;" />
+                        </a>
+
+             </div>
+                </div>
+                <div class="col-lg-10">
+                    <div class="nav-menu">
+                        <nav class="mainmenu">
+                            <ul>
+                                <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                <li><a asp-controller="Room" asp-action="Rooms">Rooms</a></li>
+                                <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
+                                <li><a asp-controller="Contact" asp-action="Contact">Contact</a></li>
+                                <li><a asp-controller="Login" asp-action="Login">Login</a></li>
+
+                            </ul>
+                        </nav>
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Header End -->
