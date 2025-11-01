@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookify.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251024153948_SeedInitialData")]
-    partial class SeedInitialData
+    [Migration("20251031165129_UpdateSeedData")]
+    partial class UpdateSeedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -141,23 +141,79 @@ namespace Bookify.Data.Migrations
                         new
                         {
                             Id = 2,
-                            IsAvailable = true,
+                            IsAvailable = false,
                             RoomNumber = "102",
                             RoomTypeId = 1
                         },
                         new
                         {
                             Id = 3,
-                            IsAvailable = false,
+                            IsAvailable = true,
                             RoomNumber = "201",
                             RoomTypeId = 2
                         },
                         new
                         {
                             Id = 4,
+                            IsAvailable = false,
+                            RoomNumber = "202",
+                            RoomTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 5,
                             IsAvailable = true,
                             RoomNumber = "301",
                             RoomTypeId = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            IsAvailable = false,
+                            RoomNumber = "302",
+                            RoomTypeId = 3
+                        },
+                        new
+                        {
+                            Id = 7,
+                            IsAvailable = true,
+                            RoomNumber = "401",
+                            RoomTypeId = 4
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsAvailable = false,
+                            RoomNumber = "402",
+                            RoomTypeId = 4
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsAvailable = true,
+                            RoomNumber = "501",
+                            RoomTypeId = 5
+                        },
+                        new
+                        {
+                            Id = 10,
+                            IsAvailable = false,
+                            RoomNumber = "502",
+                            RoomTypeId = 5
+                        },
+                        new
+                        {
+                            Id = 11,
+                            IsAvailable = true,
+                            RoomNumber = "601",
+                            RoomTypeId = 6
+                        },
+                        new
+                        {
+                            Id = 12,
+                            IsAvailable = false,
+                            RoomNumber = "602",
+                            RoomTypeId = 6
                         });
                 });
 
@@ -192,14 +248,14 @@ namespace Bookify.Data.Migrations
                             Id = 1,
                             Description = "A cozy room for one guest.",
                             Name = "Single Room",
-                            PricePerNight = 800m
+                            PricePerNight = 100m
                         },
                         new
                         {
                             Id = 2,
                             Description = "A comfortable room for two guests.",
                             Name = "Double Room",
-                            PricePerNight = 1200m
+                            PricePerNight = 130m
                         },
                         new
                         {
@@ -207,6 +263,27 @@ namespace Bookify.Data.Migrations
                             Description = "A luxurious suite with living area.",
                             Name = "Suite",
                             PricePerNight = 2000m
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "A spacious room featuring a king - size bed, elegant decor, and a stunning city view — perfect for couples or business travelers.",
+                            Name = "Premium King Room",
+                            PricePerNight = 159m
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "A large and comfortable room designed for families, featuring multiple beds and modern amenities to ensure a pleasant stay for everyone.",
+                            Name = "Family Room",
+                            PricePerNight = 299m
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "A spacious and elegant room featuring premium furnishings, modern amenities, and a beautiful view — perfect for guests seeking extra comfort and style.",
+                            Name = "Deluxe Room",
+                            PricePerNight = 198m
                         });
                 });
 

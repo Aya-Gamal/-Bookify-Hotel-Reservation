@@ -52,5 +52,15 @@ namespace Bookify.Services.ModelsRepos
             return Response<IEnumerable<Room>>.Ok(availableRooms);
         }
 
+        public async Task<Response<IEnumerable<Room>>> GetAllRooms()
+        {
+            var rooms = await dbContext.Rooms
+                .Include(r => r.RoomType)
+                .ToListAsync();
+
+            return Response<IEnumerable<Room>>.Ok(rooms);
+        }
+
+
     }
 }
