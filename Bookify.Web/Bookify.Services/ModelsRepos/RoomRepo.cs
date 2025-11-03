@@ -1,6 +1,7 @@
 ﻿using Bookify.Data.Data;
 using Bookify.Data.Models;
 using Bookify.Services.Generic;
+using Bookify.Services.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -23,42 +24,23 @@ namespace Bookify.Services.ModelsRepos
             genericRepo = new(dbContext);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetRoomsWithoutReservations()
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetRoomsWithoutReservations()
         {
             return await genericRepo.FindAll(x => x.IsAvailable);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetRoomsWithoutReservations(RoomType roomType)
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetRoomsWithoutReservations(RoomType roomType)
         {
             return await genericRepo.FindAll(x => x.IsAvailable && x.RoomTypeId == roomType.Id);
         }
 
-        public async Task<Response<IEnumerable<Room>>> GetAvailableRoomsByDate(DateTime checkIn, DateTime checkOut)
-        {
-            var bookedRoomIds = await dbContext.Bookings
-                .Where(b => b.Status != BookingStatus.Cancelled &&
-                            checkIn < b.CheckOutDate &&
-                            checkOut > b.CheckInDate)
-                .Select(b => b.RoomId)
-                .ToListAsync();
-
-            var availableRooms = await dbContext.Rooms
-                .Include(r => r.RoomType)
-                .Where(r => !bookedRoomIds.Contains(r.Id) && r.IsAvailable)
-                .GroupBy(r => r.Id)   
-                .Select(g => g.First())
-                .ToListAsync();
-
-            return Response<IEnumerable<Room>>.Ok(availableRooms);
-        }
-
-        public async Task<Response<IEnumerable<Room>>> GetAllRooms()
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetRoomsWithReservations()
         {
             var rooms = await dbContext.Rooms
                 .Include(r => r.RoomType)
                 .ToListAsync();
 
-            return Response<IEnumerable<Room>>.Ok(rooms);
+            return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
         }
 
 
