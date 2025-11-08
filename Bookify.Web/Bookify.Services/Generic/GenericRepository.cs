@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Bookify.Data.Data;
+using Bookify.Services.Helpers;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,122 +23,122 @@ namespace Bookify.Services.Generic
             dbSet = dbContext.Set<T>();
         }
 
-        public async Task<Response<int>> SaveChangesAsync( CancellationToken cancellationToken = default)
+        public async Task<ResponseHelper<int>> SaveChangesAsync( CancellationToken cancellationToken = default)
         {
             try
             {
                 int result = await dbContext.SaveChangesAsync(cancellationToken);
-                return Response<int>.Ok(result);
+                return ResponseHelper<int>.Ok(result);
             }
             catch (DbUpdateConcurrencyException ucex)
             {
-                return Response<int>.Fail($"{ucex.Message}\n{ucex.InnerException.Message}");
+                return ResponseHelper<int>.Fail($"{ucex.Message}\n{ucex.InnerException.Message}");
 
             }
             catch (DbUpdateException uex)
             {
-                return Response<int>.Fail($"{uex.Message}\n{uex.InnerException.Message}");
+                return ResponseHelper<int>.Fail($"{uex.Message}\n{uex.InnerException.Message}");
             }
             catch (Exception ex)
             {
-                return Response<int>.Fail($"{ex.Message}\n{ex.InnerException.Message}");
+                return ResponseHelper<int>.Fail($"{ex.Message}\n{ex.InnerException.Message}");
             }
         }
 
-        public async Task<Response> Add(T entity)
+        public async Task<ResponseHelper> Add(T entity)
         {
             await dbSet.AddAsync(entity);
             var result = await SaveChangesAsync();
             if (result.Error)
             {
-                return Response.Fail(result.Message);
+                return ResponseHelper.Fail(result.Message);
             }
-            return Response.OK();
+            return ResponseHelper.OK();
         }
 
-        public async Task<Response> Add(IEnumerable<T> entities)
+        public async Task<ResponseHelper> Add(IEnumerable<T> entities)
         {
             await dbSet.AddRangeAsync(entities);
             var result = await SaveChangesAsync();
             if (result.Error)
             {
-                return Response.Fail(result.Message);
+                return ResponseHelper.Fail(result.Message);
             }
-            return Response.OK();
+            return ResponseHelper.OK();
         }
 
-        public async Task<Response> Delete(T entity)
+        public async Task<ResponseHelper> Delete(T entity)
         {
             dbSet.Remove(entity);
             var result = await SaveChangesAsync();
             if (result.Error)
             {
-                return Response.Fail(result.Message);
+                return ResponseHelper.Fail(result.Message);
             }
-            return Response.OK();
+            return ResponseHelper.OK();
         }
 
-        public async Task<Response> Delete(IEnumerable<T> entities)
+        public async Task<ResponseHelper> Delete(IEnumerable<T> entities)
         {
             dbSet.RemoveRange(entities);
             var result = await SaveChangesAsync();
             if (result.Error)
             {
-                return Response.Fail(result.Message);
+                return ResponseHelper.Fail(result.Message);
             }
-            return Response.OK();
+            return ResponseHelper.OK();
         }
 
-        public async Task<Response<T>> Find(Expression<Func<T, bool>> predicate)
+        public async Task<ResponseHelper<T>> Find(Expression<Func<T, bool>> predicate)
         {
             var entity = await dbSet.SingleOrDefaultAsync(predicate);
             if (entity is null)
             {
-                return Response<T>.Fail("Item not found");
+                return ResponseHelper<T>.Fail("Item not found");
             }
-            return Response<T>.Ok(entity);
+            return ResponseHelper<T>.Ok(entity);
         }
 
-        public async Task<Response<IEnumerable<T>>> FindAll()
+        public async Task<ResponseHelper<IEnumerable<T>>> FindAll()
         {
             IEnumerable<T> entities = await dbSet.ToListAsync();
             if (!entities.Any())
             {
-                return Response<IEnumerable<T>>.Fail("No items found");
+                return ResponseHelper<IEnumerable<T>>.Fail("No items found");
             }
-            return Response<IEnumerable<T>>.Ok(entities);
+            return ResponseHelper<IEnumerable<T>>.Ok(entities);
         }
 
-        public async Task<Response<IEnumerable<T>>> FindAll(Expression<Func<T, bool>> predicate)
+        public async Task<ResponseHelper<IEnumerable<T>>> FindAll(Expression<Func<T, bool>> predicate)
         {
             var entities = await dbSet.Where(predicate).ToListAsync();
             if (!entities.Any())
             {
-                return Response<IEnumerable<T>>.Fail("No items found");
+                return ResponseHelper<IEnumerable<T>>.Fail("No items found");
             }
-            return Response<IEnumerable<T>>.Ok(entities);
+            return ResponseHelper<IEnumerable<T>>.Ok(entities);
         }
 
-        public async Task<Response> Update(T entity)
+        public async Task<ResponseHelper> Update(T entity)
         {
             dbSet.Update(entity);
             var result = await SaveChangesAsync();
             if (result.Error)
             {
-                return Response.Fail(result.Message);
+                return ResponseHelper.Fail(result.Message);
             }
-            return Response.OK();
+            return ResponseHelper.OK();
         }
 
-        public async Task<Response> Update(IEnumerable<T> entities)
+        public async Task<ResponseHelper> Update(IEnumerable<T> entities)
         {
             dbSet.UpdateRange(entities);
             var result = await SaveChangesAsync();
             if (result.Error)
             {
-                return Response.Fail(result.Message);
+                return ResponseHelper.Fail(result.Message);
             }
-            return Response.OK();
+            return ResponseHelper.OK();
         }
     }
 }

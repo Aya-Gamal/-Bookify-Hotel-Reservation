@@ -1,4 +1,5 @@
 using Bookify.Data.Data;
+using Bookify.Services.ModelsRepos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddRoles<IdentityRole>() 
     .AddEntityFrameworkStores<AppDbContext>();
 
+builder.Services.AddScoped<RoomRepo>();
 builder.Services.AddControllersWithViews();
 
 // Add services to the container.

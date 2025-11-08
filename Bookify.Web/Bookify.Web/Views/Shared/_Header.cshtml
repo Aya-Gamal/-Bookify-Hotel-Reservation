@@ -1,8 +1,4 @@
-﻿@page
-@model Bookify.Web.Views.Shared._HeaderModel
-@{
-}
-<!-- Offcanvas Menu Section Begin -->
+﻿<!-- Offcanvas Menu Section Begin -->
 <div class="offcanvas-menu-overlay"></div>
 <div class="canvas-open">
     <i class="icon_menu"></i>
@@ -11,31 +7,35 @@
     <div class="canvas-close">
         <i class="icon_close"></i>
     </div>
-    <div class="search-icon search-switch">
-        <i class="icon_search"></i>
-    </div>
-    <div class="header-configure-area">
-        <div class="language-option">
-            <img src="~/img/flag.jpg" alt="">
-            <span>EN <i class="fa fa-angle-down"></i></span>
-            <div class="flag-dropdown">
-                <ul>
-                    <li><a href="#">Zi</a></li>
-                    <li><a href="#">Fr</a></li>
-                </ul>
-            </div>
-        </div>
-        <a href="#" class="bk-btn">Booking Now</a>
-    </div>
+    <div class="header-configure-area"></div>
     <nav class="mainmenu mobile-menu">
         <ul>
             <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
             <li><a asp-controller="Room" asp-action="Rooms">Rooms</a></li>
             <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
-            <li><a asp-controller="Login" asp-action="Login">Register</a></li>
             <li><a asp-controller="Contact" asp-action="Contact">Contact</a></li>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li>
+                    <a href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();" class="nav-link text-dark">
+                        Logout
+                    </a>
+
+                    <form id="logoutForm" asp-controller="Login" asp-action="Logout" method="post" style="display:none;">
+                        @Html.AntiForgeryToken()
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li><a asp-controller="Login" asp-action="Login">Login</a></li>
+                <li><a asp-controller="Register" asp-action="Index">Register</a></li>
+            }
+
         </ul>
     </nav>
+
     <div id="mobile-menu-wrap"></div>
     <div class="top-social">
         <a href="#"><i class="fa fa-facebook"></i></a>
@@ -45,7 +45,6 @@
     </div>
     <ul class="top-widget">
         <li><i class="fa fa-phone"></i> (12) 345 67890</li>
-        <li><i class="fa fa-envelope"></i> info.colorlib@gmail.com</li>
     </ul>
 </div>
 <!-- Offcanvas Menu Section End -->
@@ -55,12 +54,11 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-2 d-flex justify-content-start">
-                    <div class="logo" >
+                    <div class="logo">
                         <a asp-controller="Home" asp-action="Index">
                             <img src="~/images/logo.png" alt="logo" style="width:250px; height:auto;" />
                         </a>
-
-             </div>
+                    </div>
                 </div>
                 <div class="col-lg-10">
                     <div class="nav-menu">
@@ -69,11 +67,23 @@
                                 <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
                                 <li><a asp-controller="Room" asp-action="Rooms">Rooms</a></li>
                                 <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
-                                <li><a asp-controller="Login" asp-action="Login">Register</a></li>
                                 <li><a asp-controller="Contact" asp-action="Contact">Contact</a></li>
+
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li>
+                                        <form asp-controller="Login" asp-action="Logout" method="post" style="display:inline;">
+                                            <button type="submit" class="nav-link btn btn-link text-dark p-0" style="text-decoration:none;">Logout</button>
+                                        </form>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li><a asp-controller="Login" asp-action="Login">Login</a></li>
+                                    <li><a asp-controller="Register" asp-action="Index">Register</a></li>
+                                }
                             </ul>
                         </nav>
-                       
                     </div>
                 </div>
             </div>

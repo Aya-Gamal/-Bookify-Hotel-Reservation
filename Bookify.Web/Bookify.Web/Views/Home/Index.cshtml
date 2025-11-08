@@ -14,6 +14,24 @@
     <!-- Hero Section Begin -->
     <section class="hero-section">
         <div class="container">
+            @if (User.Identity.IsAuthenticated&&TempData["SuccessMessage"] != null)
+            {
+                <div id="successAlert" class="alert alert-success text-center mt-3" role="alert">
+                    @TempData["SuccessMessage"]
+                </div>
+
+                <script>
+                    setTimeout(function () {
+                        const alertBox = document.getElementById('successAlert');
+                        if (alertBox) {
+                            alertBox.style.transition = 'opacity 0.6s ease';
+                            alertBox.style.opacity = '0';
+                            setTimeout(() => alertBox.remove(), 600);
+                        }
+                    }, 3000); 
+                </script>
+            }
+
             <div class="row">
                 <div class="col-lg-6">
                     <div class="hero-text">
@@ -27,31 +45,15 @@
                 </div>
                 <div class="col-xl-4 col-lg-5 offset-xl-2 offset-lg-1">
                     <div class="booking-form">
-                        <h3>Booking Your Hotel</h3>
-                        <form action="#">
+                        <h3>Booking Your Room</h3>
+                        <form asp-controller="RoomAvalibality" asp-action="CheckAvailability" method="get">
                             <div class="check-date">
                                 <label for="date-in">Check In:</label>
-                                <input type="text" class="date-input" id="date-in">
-                                <i class="icon_calendar"></i>
+                                <input type="date" name="checkIn" id="date-in" required>
                             </div>
                             <div class="check-date">
                                 <label for="date-out">Check Out:</label>
-                                <input type="text" class="date-input" id="date-out">
-                                <i class="icon_calendar"></i>
-                            </div>
-                            <div class="select-option">
-                                <label for="guest">Guests:</label>
-                                <select id="guest">
-                                    <option value="">2 Adults</option>
-                                    <option value="">3 Adults</option>
-                                </select>
-                            </div>
-                            <div class="select-option">
-                                <label for="room">Room:</label>
-                                <select id="room">
-                                    <option value="">1 Room</option>
-                                    <option value="">2 Room</option>
-                                </select>
+                                <input type="date" name="checkOut" id="date-out" required>
                             </div>
                             <button type="submit">Check Availability</button>
                         </form>
@@ -74,18 +76,15 @@
                     <div class="about-text">
                         <div class="section-title">
                             <span>About Us</span>
-                            <h2>Intercontinental LA <br />Westlake Hotel</h2>
+                            <h2>Nile Horizon<br />Hotel</h2>
                         </div>
                         <p class="f-para">
-                            Sona.com is a leading online accommodation site. We’re passionate about
-                            travel. Every day, we inspire and reach millions of travelers across 90 local websites in 41
-                            languages.
+                            Welcome to Nile Horizon, a place where comfort meets elegance.
+                            Located in the heart of the city, our hotel offers a relaxing atmosphere, modern facilities, and exceptional service to make your stay unforgettable.
+                            Whether you’re traveling for business or leisure, you’ll find everything you need — from cozy rooms and fine dining to professional staff always ready to assist you.
+                            At Nile Horizon, we believe every guest deserves a memorable experience.
                         </p>
-                        <p class="s-para">
-                            So when it comes to booking the perfect hotel, vacation rental, resort,
-                            apartment, guest house, or tree house, we’ve got you covered.
-                        </p>
-                        <a href="#" class="primary-btn about-btn">Read More</a>
+         
                     </div>
                 </div>
                 <div class="col-lg-6">
@@ -210,7 +209,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="#" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -239,7 +237,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="#" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -268,7 +265,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="#" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -297,7 +293,6 @@
                                         </tr>
                                     </tbody>
                                 </table>
-                                <a href="#" class="primary-btn">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -380,8 +375,6 @@
                     <div class="blog-item set-bg" data-setbg="@Url.Content("~/images/blog/blog-1.jpg")">
                         <div class="bi-text">
                             <span class="b-tag">Travel Trip</span>
-                            <h4><a href="#">Tremblant In Canada</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 15th April, 2019</div>
                         </div>
                     </div>
                 </div>
@@ -389,8 +382,6 @@
                     <div class="blog-item set-bg" data-setbg="@Url.Content("~/images/blog/blog-2.jpg")">
                         <div class="bi-text">
                             <span class="b-tag">Camping</span>
-                            <h4><a href="#">Choosing A Static Caravan</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 15th April, 2019</div>
                         </div>
                     </div>
                 </div>
@@ -398,17 +389,13 @@
                     <div class="blog-item set-bg" data-setbg="@Url.Content("~/images/blog/blog-3.jpg")">
                         <div class="bi-text">
                             <span class="b-tag">Event</span>
-                            <h4><a href="#">Copper Canyon</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 21th April, 2019</div>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-8">
                     <div class="blog-item small-size set-bg" data-setbg="@Url.Content("~/images/blog/blog-wide.jpg")">
                         <div class="bi-text">
-                            <span class="b-tag">Event</span>
-                            <h4><a href="#">Trip To Iqaluit In Nunavut A Canadian Arctic City</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 08th April, 2019</div>
+                            <span class="b-tag">Cosy Stay</span>
                         </div>
                     </div>
                 </div>
@@ -416,8 +403,6 @@
                     <div class="blog-item small-size set-bg" data-setbg="@Url.Content("~/images/blog/blog-10.jpg")">
                         <div class="bi-text">
                             <span class="b-tag">Travel</span>
-                            <h4><a href="#">Traveling To Barcelona</a></h4>
-                            <div class="b-time"><i class="icon_clock_alt"></i> 12th April, 2019</div>
                         </div>
                     </div>
                 </div>
@@ -435,15 +420,7 @@
         </div>
     </div>
     <!-- Search model end -->
-    <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.magnific-popup.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
+   
 </body>
 
 </html>

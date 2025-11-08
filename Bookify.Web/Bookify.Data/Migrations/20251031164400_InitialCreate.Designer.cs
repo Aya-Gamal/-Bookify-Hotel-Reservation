@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookify.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250928213058_AddPaymentsTable")]
-    partial class AddPaymentsTable
+    [Migration("20251031164400_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,6 +129,29 @@ namespace Bookify.Data.Migrations
                     b.HasIndex("RoomTypeId");
 
                     b.ToTable("Rooms");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 7,
+                            IsAvailable = true,
+                            RoomNumber = "102",
+                            RoomTypeId = 1
+                        },
+                        new
+                        {
+                            Id = 8,
+                            IsAvailable = true,
+                            RoomNumber = "201",
+                            RoomTypeId = 2
+                        },
+                        new
+                        {
+                            Id = 9,
+                            IsAvailable = false,
+                            RoomNumber = "302",
+                            RoomTypeId = 3
+                        });
                 });
 
             modelBuilder.Entity("Bookify.Data.Models.RoomType", b =>
@@ -155,6 +178,29 @@ namespace Bookify.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("RoomTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "A cozy room for one guest.",
+                            Name = "Single Room",
+                            PricePerNight = 800m
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "A comfortable room for two guests.",
+                            Name = "Double Room",
+                            PricePerNight = 1200m
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "A luxurious suite with living area.",
+                            Name = "Suite",
+                            PricePerNight = 2000m
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
