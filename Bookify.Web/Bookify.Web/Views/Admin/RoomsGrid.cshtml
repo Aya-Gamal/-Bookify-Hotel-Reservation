@@ -1,0 +1,141 @@
+﻿@model List<Bookify.Data.Models.Room>
+
+@{
+    ViewData["Title"] = "Manage Rooms";
+    Layout = "_Layout";
+
+    var roomTypes = ViewBag.RoomTypes as List<Bookify.Data.Models.RoomType>;
+}
+
+<section class="spad">
+    <div class="container">
+        <h2 class="text-center mb-4" style="color:#8B4513;">Manage Rooms</h2>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+
+        <form asp-action="SaveRooms" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" id="deletedIds" name="deletedIds" />
+
+            <table class="table table-bordered table-striped" id="roomsTable">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Room Number</th>
+                        <th>Room Type</th>
+                        <th>Availability</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr data-id="@Model[i].Id">
+                            <input type="hidden" name="model[@i].Id" value="@Model[i].Id" />
+
+                            <td>
+                                <input name="model[@i].RoomNumber" value="@Model[i].RoomNumber" class="form-control" />
+                            </td>
+
+                            <td>
+                                <select name="model[@i].RoomTypeId" class="form-control">
+                                    @foreach (var type in roomTypes)
+                                    {
+                                        if (type.Id == Model[i].RoomTypeId)
+                                        {
+                                            @:
+                                            <option value="@type.Id" selected>@type.Name</option>
+                                        }
+                                        else
+                                        {
+                                            @:
+                                            <option value="@type.Id">@type.Name</option>
+                                        }
+                                    }
+                                </select>
+                            </td>
+
+                            <td>
+                                <select name="model[@i].IsAvailable" class="form-control">
+                                    @if (Model[i].IsAvailable)
+                                    {
+                                        @:
+                                        <option value="true" selected>Available</option>
+                                        @:
+                                        <option value="false">Not Available</option>
+                                    }
+                                    else
+                                    {
+                                        @:
+                                        <option value="true">Available</option>
+                                        @:
+                                        <option value="false" selected>Not Available</option>
+                                    }
+                                </select>
+                            </td>
+
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm deleteRow">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success mb-3" id="addRow">+ Add Room</button>
+            <br />
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        let deletedIds = [];
+
+        function attachDeleteHandlers() {
+            document.querySelectorAll(".deleteRow").forEach(btn => {
+                btn.onclick = function () {
+                    let row = this.closest("tr");
+                    let id = row.dataset.id;
+                    if (id && id != "0") deletedIds.push(id);
+                    row.remove();
+                    document.getElementById("deletedIds").value = deletedIds.join(',');
+                }
+            });
+        }
+
+        document.getElementById("addRow").addEventListener("click", function () {
+            let table = document.getElementById("roomsTable").getElementsByTagName('tbody')[0];
+            let index = table.rows.length;
+
+            // Build RoomType options
+            let roomTypeOptions = '';
+            @foreach (var type in roomTypes)
+            {
+                    @:roomTypeOptions += '<option value="@type.Id">@type.Name</option>';
+            }
+
+            let row = table.insertRow();
+            row.dataset.id = "0";
+            row.innerHTML = `
+                <input type="hidden" name="model[${index}].Id" value="0" />
+                <td><input name="model[${index}].RoomNumber" class="form-control" /></td>
+                <td><select name="model[${index}].RoomTypeId" class="form-control">${roomTypeOptions}</select></td>
+                <td>
+                    <select name="model[${index}].IsAvailable" class="form-control">
+                        <option value="true">Available</option>
+                        <option value="false">Not Available</option>
+                    </select>
+                </td>
+                <td><button type="button" class="btn btn-danger btn-sm deleteRow">Delete</button></td>
+            `;
+
+            attachDeleteHandlers();
+        });
+
+        attachDeleteHandlers();
+    </script>
+}

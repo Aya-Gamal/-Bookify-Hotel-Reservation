@@ -66,5 +66,26 @@ namespace Bookify.Services.ModelsRepos
             return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
         }
 
+        public async Task<ResponseHelper<Room>> GetRoomById(int id)
+        {
+            var roomres = await genericRepo.Find(x => x.Id == id);
+
+            return ResponseHelper<Room>.Ok(roomres.Data);
+        }
+
+
+        public async Task<ResponseHelper> Add(Room room)
+        {
+            return await genericRepo.Add(room);
+        }
+        public async Task<ResponseHelper> Delete(Room room)
+        {
+            return await genericRepo.Delete(room);
+        }
+        public async Task<ResponseHelper> Update(Room room)
+        {
+            return await genericRepo.Update(room);
+        }
+
     }
 }

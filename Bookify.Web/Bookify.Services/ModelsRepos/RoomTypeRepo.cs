@@ -26,6 +26,11 @@ namespace Bookify.Services.ModelsRepos
             genericRepo = new(dbContext);
         }
 
+        public async Task<ResponseHelper<RoomType>> GetById(int id)
+        {
+            return await genericRepo.Find(x => x.Id == id);
+        }
+
         public async Task<ResponseHelper<IEnumerable<RoomType>>> GetAll()
         {
             return await genericRepo.FindAll();
