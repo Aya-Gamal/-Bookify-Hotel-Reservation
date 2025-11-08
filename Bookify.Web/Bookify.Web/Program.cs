@@ -16,6 +16,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<AppDbContext>();
 
 builder.Services.AddScoped<RoomRepo>();
+builder.Services.AddScoped<RoomTypeRepo>();
+builder.Services.AddScoped<BookingRepo>();
 builder.Services.AddControllersWithViews();
 
 // Add services to the container.
