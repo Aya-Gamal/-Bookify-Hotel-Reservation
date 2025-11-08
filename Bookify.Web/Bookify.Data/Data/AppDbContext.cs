@@ -72,7 +72,7 @@ namespace Bookify.Data.Data
                 .Property(rt => rt.PricePerNight)
                 .HasPrecision(18, 2);
 
-            builder.Entity<RoomType>().HasData(
+           builder.Entity<RoomType>().HasData(
       new RoomType { Id = 1, Name = "Single Room", Description = "A cozy room for one guest.", PricePerNight = 100 },
       new RoomType { Id = 2, Name = "Double Room", Description = "A comfortable room for two guests.", PricePerNight = 130 },
       new RoomType { Id = 3, Name = "Suite", Description = "A luxurious suite with living area.", PricePerNight = 2000 },

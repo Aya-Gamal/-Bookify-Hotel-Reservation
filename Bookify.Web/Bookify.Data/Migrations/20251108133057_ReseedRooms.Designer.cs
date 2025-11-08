@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bookify.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251031165129_UpdateSeedData")]
-    partial class UpdateSeedData
+    [Migration("20251108133057_ReseedRooms")]
+    partial class ReseedRooms
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -206,13 +206,6 @@ namespace Bookify.Data.Migrations
                             Id = 11,
                             IsAvailable = true,
                             RoomNumber = "601",
-                            RoomTypeId = 6
-                        },
-                        new
-                        {
-                            Id = 12,
-                            IsAvailable = false,
-                            RoomNumber = "602",
                             RoomTypeId = 6
                         });
                 });
