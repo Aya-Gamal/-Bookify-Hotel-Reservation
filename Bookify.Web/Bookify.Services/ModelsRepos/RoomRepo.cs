@@ -1,4 +1,5 @@
-﻿using Bookify.Data.Data;
+﻿using Azure;
+using Bookify.Data.Data;
 using Bookify.Data.Models;
 using Bookify.Services.Generic;
 using Bookify.Services.Helpers;
@@ -42,6 +43,35 @@ namespace Bookify.Services.ModelsRepos
 
             return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
         }
+
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetAvailableRoomsByDate(DateTime checkIn, DateTime checkOut)
+        {
+            var bookedRoomIds = await dbContext.Bookings
+                .Where(b => b.Status != BookingStatus.Cancelled &&
+                            checkIn < b.CheckOutDate &&
+                            checkOut > b.CheckInDate)
+                .Select(b => b.RoomId)
+                .ToListAsync();
+
+            var availableRooms = await dbContext.Rooms
+                .Include(r => r.RoomType)
+                .Where(r => !bookedRoomIds.Contains(r.Id) && r.IsAvailable)
+                .GroupBy(r => r.Id)
+                .Select(g => g.First())
+                .ToListAsync();
+
+            return ResponseHelper<IEnumerable<Room>>.Ok(availableRooms);
+        }
+
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetAllRooms()
+        {
+            var rooms = await dbContext.Rooms
+                .Include(r => r.RoomType)
+                .ToListAsync();
+
+            return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
+        }
+
 
 
     }
