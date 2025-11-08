@@ -43,6 +43,28 @@ namespace Bookify.Services.ModelsRepos
             return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
         }
 
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetAllRooms()
+        {
+
+
+                var rooms = await dbContext.Rooms
+                .Include(x => x.RoomType)
+                .ToListAsync();  
+            return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
+
+
+        }
+
+        public async Task<ResponseHelper<IEnumerable<Room>>> GetAvailableRoomsByDate(DateTime checkin, DateTime checkout)
+        {
+            var rooms = await dbContext.Rooms
+                .Include(r => r.Bookings)
+                .Where(r => !r.Bookings.Any(b =>
+                    b.CheckInDate < checkout && b.CheckOutDate > checkin)) 
+                .ToListAsync();
+
+            return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
+        }
 
     }
 }
