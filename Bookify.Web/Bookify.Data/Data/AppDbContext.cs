@@ -40,7 +40,7 @@ namespace Bookify.Data.Data
 
             // User (AspNetUsers) → Booking (1-to-many)
             builder.Entity<Booking>()
-                   .HasOne<Microsoft.AspNetCore.Identity.IdentityUser>()
+                   .HasOne(b=>b.User)
                    .WithMany()
                    .HasForeignKey(b => b.UserId)
                    .OnDelete(DeleteBehavior.Restrict);
