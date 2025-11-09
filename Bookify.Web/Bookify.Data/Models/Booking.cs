@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bookify.Data.Models
 {
@@ -13,6 +14,8 @@ namespace Bookify.Data.Models
         public int RoomId { get; set; }
         public Room Room { get; set; }
         public string UserId { get; set; }
+
+        public IdentityUser User { get; set; }
 
         [Required]
         public DateTime CheckInDate { get; set; }
