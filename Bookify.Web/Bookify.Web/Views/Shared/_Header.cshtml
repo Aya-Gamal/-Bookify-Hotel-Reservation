@@ -15,25 +15,28 @@
             <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
             <li><a asp-controller="Contact" asp-action="Contact">Contact</a></li>
 
+            @* ✅ يظهر فقط لو المستخدم أدمن *@
+            @if (User.IsInRole("Admin"))
+            {
+                <li><a asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+            }
+
             @if (User.Identity.IsAuthenticated)
             {
                 <li>
                     <a href="javascript:void(0);" onclick="document.getElementById('logoutForm').submit();" class="nav-link text-dark">
                         Logout
                     </a>
-
-                    <form id="logoutForm" asp-controller="Login" asp-action="Logout" method="post" style="display:none;">
+                    <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" method="post" style="display:none;">
                         @Html.AntiForgeryToken()
                     </form>
                 </li>
             }
             else
             {
-                <li><a asp-controller="Login" asp-action="Login">Login</a></li>
-                <li><a asp-controller="Register" asp-action="Index">Register</a></li>
-                <li><a asp-controller="Admin" asp-action="AdminDashboard">AdminDashboard</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
             }
-
         </ul>
     </nav>
 
@@ -70,20 +73,24 @@
                                 <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
                                 <li><a asp-controller="Contact" asp-action="Contact">Contact</a></li>
 
+                                @* ✅ يظهر فقط لو المستخدم أدمن *@
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <li><a asp-controller="Admin" asp-action="Index">Admin Dashboard</a></li>
+                                }
+
                                 @if (User.Identity.IsAuthenticated)
                                 {
                                     <li>
-                                        <form asp-controller="Login" asp-action="Logout" method="post" style="display:inline;">
+                                        <form asp-area="Identity" asp-page="/Account/Logout" method="post" style="display:inline;">
                                             <button type="submit" class="nav-link btn btn-link text-dark p-0" style="text-decoration:none;">Logout</button>
                                         </form>
                                     </li>
                                 }
                                 else
                                 {
-                                    <li><a asp-controller="Login" asp-action="Login">Login</a></li>
-                                    <li><a asp-controller="Register" asp-action="Index">Register</a></li>
-                                    <li><a asp-controller="Admin" asp-action="Index">AdminDashboard</a></li>
-
+                                    <li><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+                                    <li><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
                                 }
                             </ul>
                         </nav>
