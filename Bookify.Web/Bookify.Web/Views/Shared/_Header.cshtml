@@ -10,13 +10,13 @@
     <div class="header-configure-area"></div>
     <nav class="mainmenu mobile-menu">
         <ul>
-             @{
-                                var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
-                                var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
-                                var currentArea = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
-                                var currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
+            @{
+                var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "";
+                var currentAction = ViewContext.RouteData.Values["action"]?.ToString() ?? "";
+                var currentArea = ViewContext.RouteData.Values["area"]?.ToString() ?? "";
+                var currentPage = ViewContext.RouteData.Values["page"]?.ToString() ?? "";
 
-                            }
+            }
             <li class="active"><a asp-controller="Home" asp-action="Index">Home</a></li>
             <li><a asp-controller="Room" asp-action="Rooms">Rooms</a></li>
             <li><a asp-controller="About" asp-action="AboutUs">About Us</a></li>
@@ -94,7 +94,7 @@
                 <div class="col-lg-10">
                     <div class="nav-menu">
                         <nav class="mainmenu">
-                           
+
                             <ul>
                                 <li class="@(currentController == "Home" ? "active" : "")">
                                     <a asp-controller="Home" asp-action="Index">Home</a>
