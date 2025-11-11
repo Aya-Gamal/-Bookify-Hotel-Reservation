@@ -9,11 +9,17 @@ ________________________________________
 Team Members
 
 Rana Yehia Zakria 
+
 Manar Emad Ashry	
+
 Reem Mohamed Abdelmonaim
+
 Aya Gamal Hanfe	
+
 Mohamed Gamal Ahmed	
+
 Mohamed Khaled Ali 
+
 ________________________________________
 Work Plan
 1.	Research & Analysis
