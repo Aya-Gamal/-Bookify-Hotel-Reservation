@@ -30,6 +30,8 @@
 
             @if (User.Identity.IsAuthenticated)
             {
+    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+    {
                 <li class="submenu">
                     <a href="#"><i class="fa fa-shopping-cart"></i> Cart</a>
                     <ul class="dropdown-list">
@@ -40,6 +42,7 @@
                         </li>
                     </ul>
                 </li>
+    }
 
                 <li class="submenu">
                     <a href="#"><i class="fa fa-user"></i> Profile</a>
@@ -120,19 +123,22 @@
 
                                 @if (User.Identity.IsAuthenticated)
                                 {
-                                    <li class="dropdown @(currentController == "Cart" ? "active" : "")">
-                                        <a href="#" style="outline:none; border:none; box-shadow:none;"
-                                           class="dropdown-toggle" data-bs-toggle="dropdown">
-                                            <i class="fa fa-shopping-cart"></i> Cart <i class="fa fa-caret-down"></i>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li>
-                                                <a class="dropdown-item" asp-controller="Cart" asp-action="Index">
-                                                    <i class="fa fa-eye"></i> View Cart
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </li>
+                                    @if (User.Identity.IsAuthenticated && !User.IsInRole("Admin"))
+                                    {
+                                        <li class="dropdown @(currentController == "Cart" ? "active" : "")">
+                                            <a href="#" style="outline:none; border:none; box-shadow:none;"
+                                            class="dropdown-toggle" data-bs-toggle="dropdown">
+                                                <i class="fa fa-shopping-cart"></i> Cart <i class="fa fa-caret-down"></i>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item" asp-controller="Cart" asp-action="Index">
+                                                        <i class="fa fa-eye"></i> View Cart
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    }
 
                                     <li class="dropdown @(currentController == "Profile" ? "active" : "")">
                                         <a href="#" style="outline:none; border:none; box-shadow:none;"
