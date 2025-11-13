@@ -4500,11 +4500,32 @@ ul, ol {
 		font-size: 12px;
 	}
 
-.dropdown-menu {
-	font-family: 'Cabin', sans-serif;
+/* Mini-cart hover background for smooth feel */
+.hover-bg-light:hover {
+	background-color: #f1f1f1;
+	transition: all 0.3s ease;
 }
 
-	.dropdown-menu img {
-		border-radius: 8px;
+/* Dropdown cart animation */
+.dropdown-menu {
+	animation: dropdownFade 0.2s ease-in-out;
+}
+
+@keyframes dropdownFade {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
 	}
-	
+
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Matching button hover to cart page */
+.btn-dark:hover {
+	background-color: #212529 !important;
+	color: #fff !important;
+}
+

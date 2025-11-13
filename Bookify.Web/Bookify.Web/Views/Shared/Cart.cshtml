@@ -1,36 +1,209 @@
 ﻿@{
     ViewData["Title"] = "Your Cart";
     Layout = "_Layout.cshtml";
+
+    var cartItems = ViewBag.CartItems as List<dynamic>;
+    int cartCount = cartItems != null ? cartItems.Count : 0;
+
+    int totalPrice = 0;
+    if (cartItems != null)
+    {
+        foreach (var item in cartItems)
+        {
+            totalPrice += (int)item.Price;
+        }
+    }
 }
 
-<section class="room-details-section spad">
-    <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: rgb(139, 69, 19);">Your Reservation Cart</h2>
+<section class="h-100 h-custom" style="background-color: #f5f5f5;">
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-12">
+                <div class="card card-registration" style="border-radius: 15px;">
+                    <div class="card-body p-0">
+                        <div class="row g-0">
+                            <!-- Cart Items -->
+                            <div class="col-lg-8">
+                                <div class="p-5">
+                                    <div class="d-flex justify-content-between align-items-center mb-5">
+                                        <h1 class="fw-bold mb-0">Shopping Cart</h1>
+                                        <h6 class="mb-0 text-muted" id="cart-count">@cartCount items</h6>
+                                    </div>
+                                    <hr class="my-4">
 
+                                    @if (cartItems != null && cartItems.Count > 0)
+                                    {
+                                        foreach (var item in cartItems)
+                                        {
+                                            <div class="row mb-4 d-flex justify-content-between align-items-center cart-item">
+                                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                                    <img src="@item.ImageUrl" class="img-fluid rounded-3" alt="@item.Name">
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                    <h6 class="text-muted">Room</h6>
+                                                    <h6 class="mb-0">@item.Name</h6>
+                                                </div>
+                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex align-items-center">
+                                                    <button class="btn btn-outline-secondary btn-decrease">-</button>
+                                                    <input min="1" value="1" type="number"
+                                                           class="form-control form-control-sm days-input mx-2 text-center"
+                                                           style="width:50px;" />
+                                                    <button class="btn btn-outline-secondary btn-increase">+</button>
+                                                </div>
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                    <h6 class="mb-0 item-price" data-price="@item.Price">€ @item.Price</h6>
+                                                </div>
+                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                    <!-- ✅ Delete Button -->
+                                                    <button class="btn btn-outline-danger btn-delete-item">×</button>
+                                                </div>
+                                            </div>
+                                            <hr class="my-4">
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="text-center text-muted">Your cart is empty.</p>
+                                    }
 
-        @if (ViewBag.CartItems != null)
-        {
-            foreach (var item in ViewBag.CartItems)
-            {
-                <div class="card mb-3 p-3 shadow-sm border-0 rounded-3">
-                    <div class="d-flex align-items-center">
-                        <img src="@item.ImageUrl" alt="@item.Name" class="rounded-3 me-3" style="width:120px; height:90px; object-fit:cover;">
-                        <div>
-                            <h5 class="fw-bold mb-1">@item.Name</h5>
-                            <p class="text-muted mb-0">Price per night: <span class="text-success fw-bold">$@item.Price</span></p>
+                                    <div class="pt-5">
+                                        <a href="~/Home/Index" class="btn btn-outline-dark btn-lg d-inline-flex align-items-center">
+                                            ← Back to Home
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Summary -->
+                            <div class="col-lg-4 bg-light">
+                                <div class="p-5">
+                                    <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                    <hr class="my-4">
+
+                                    <div class="d-flex justify-content-between mb-4">
+                                        <h5 class="text-uppercase">items <span id="summary-count">@cartCount</span></h5>
+                                        <h5 id="summary-price">€ @totalPrice</h5>
+                                    </div>
+
+                                    <h5 class="text-uppercase mb-3">Shipping</h5>
+                                    <div class="mb-4 pb-2">
+                                        <select class="form-select" id="shipping">
+                                            <option value="5">Standard Delivery - €5.00</option>
+                                            <option value="10">Express Delivery - €10.00</option>
+                                        </select>
+                                    </div>
+                                    <br />
+                                    <h5 class="text-uppercase mb-3">Give code</h5>
+                                    <div class="mb-5">
+                                        <div class="form-outline">
+                                            <input type="text" id="promoCode" class="form-control form-control-lg" />
+                                            <label class="form-label" for="promoCode">Enter your code</label>
+                                        </div>
+                                    </div>
+
+                                    <hr class="my-4">
+
+                                    <div class="d-flex justify-content-between mb-5">
+                                        <h5 class="text-uppercase">Total price</h5>
+                                        <h5 id="total-price">€ @totalPrice</h5>
+                                    </div>
+
+                                    <a href="~/Home/Index" class="btn btn-dark btn-block btn-lg text-center">Proceed to Checkout</a>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-            }
-
-            <div class="text-center mt-4">
-                <a href="#" class="btn px-4 py-2 rounded-3" style="background-color: rgb(201, 156, 114); color: white;">Proceed to Checkout</a>
-
             </div>
-        }
-        else
-        {
-            <p class="text-center text-muted">Your cart is empty.</p>
-        }
+        </div>
     </div>
 </section>
+
+<style>
+    .cart-item input.days-input {
+        text-align: center;
+    }
+
+    .btn-decrease, .btn-increase {
+        width: 35px;
+        height: 35px;
+        font-size: 18px;
+        padding: 0;
+        margin: 0 5px;
+    }
+
+    .btn-delete-item {
+        width: 35px;
+        height: 35px;
+        font-size: 20px;
+        padding: 0;
+    }
+
+    .btn-outline-dark {
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-dark:hover {
+            background-color: #212529;
+            color: #fff;
+        }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const decreaseBtns = document.querySelectorAll(".btn-decrease");
+        const increaseBtns = document.querySelectorAll(".btn-increase");
+        const deleteBtns = document.querySelectorAll(".btn-delete-item");
+
+        function updateTotal() {
+            let total = 0;
+            let itemCount = 0;
+            document.querySelectorAll(".cart-item").forEach(item => {
+                const days = parseInt(item.querySelector(".days-input").value);
+                const price = parseInt(item.querySelector(".item-price").dataset.price);
+                total += price * days;
+                itemCount++;
+            });
+            document.getElementById("summary-price").textContent = "€ " + total;
+            document.getElementById("total-price").textContent = "€ " + total;
+            document.getElementById("cart-count").textContent = itemCount + " items";
+            document.getElementById("summary-count").textContent = itemCount;
+        }
+
+        decreaseBtns.forEach(btn => {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+                const input = btn.closest(".cart-item").querySelector(".days-input");
+                if (input.value > 1) input.value--;
+                updateTotal();
+            });
+        });
+
+        increaseBtns.forEach(btn => {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+                const input = btn.closest(".cart-item").querySelector(".days-input");
+                input.value++;
+                updateTotal();
+            });
+        });
+
+        deleteBtns.forEach(btn => {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+                const item = btn.closest(".cart-item");
+                item.remove();
+                updateTotal();
+
+                if (document.querySelectorAll(".cart-item").length === 0) {
+                    const container = document.querySelector(".p-5");
+                    container.innerHTML = '<p class="text-center text-muted">Your cart is empty.</p>';
+                }
+            });
+        });
+    });
+</script>
