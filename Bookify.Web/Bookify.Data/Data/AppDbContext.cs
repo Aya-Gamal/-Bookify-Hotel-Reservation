@@ -45,7 +45,6 @@ namespace Bookify.Data.Data
             // User (AspNetUsers) → Booking (1-to-many)
             builder.Entity<Booking>()
                    .HasOne(b => b.User)
-                   .HasOne(b=>b.User)
                    .WithMany()
                    .HasForeignKey(b => b.UserId)
                    .OnDelete(DeleteBehavior.Restrict);
@@ -87,14 +86,13 @@ namespace Bookify.Data.Data
 
 
 
-            builder.Entity<RoomType>().HasData(
            builder.Entity<RoomType>().HasData(
-      new RoomType { Id = 1, Name = "Single Room", Description = "A cozy room for one guest.", PricePerNight = 100 },
-      new RoomType { Id = 2, Name = "Double Room", Description = "A comfortable room for two guests.", PricePerNight = 130 },
-      new RoomType { Id = 3, Name = "Suite", Description = "A luxurious suite with living area.", PricePerNight = 2000 },
-      new RoomType { Id = 4, Name = "Premium King Room", Description = "A spacious room featuring a king - size bed, elegant decor, and a stunning city view — perfect for couples or business travelers.", PricePerNight = 159 },
-      new RoomType { Id = 5, Name = "Family Room", Description = "A large and comfortable room designed for families, featuring multiple beds and modern amenities to ensure a pleasant stay for everyone.", PricePerNight = 299 },
-      new RoomType { Id = 6, Name = "Deluxe Room", Description = "A spacious and elegant room featuring premium furnishings, modern amenities, and a beautiful view — perfect for guests seeking extra comfort and style.", PricePerNight = 198 }
+          new RoomType { Id = 1, Name = "Single Room", Description = "A cozy room for one guest.", PricePerNight = 100 },
+          new RoomType { Id = 2, Name = "Double Room", Description = "A comfortable room for two guests.", PricePerNight = 130 },
+          new RoomType { Id = 3, Name = "Suite", Description = "A luxurious suite with living area.", PricePerNight = 2000 },
+          new RoomType { Id = 4, Name = "Premium King Room", Description = "A spacious room featuring a king - size bed, elegant decor, and a stunning city view — perfect for couples or business travelers.", PricePerNight = 159 },
+          new RoomType { Id = 5, Name = "Family Room", Description = "A large and comfortable room designed for families, featuring multiple beds and modern amenities to ensure a pleasant stay for everyone.", PricePerNight = 299 },
+          new RoomType { Id = 6, Name = "Deluxe Room", Description = "A spacious and elegant room featuring premium furnishings, modern amenities, and a beautiful view — perfect for guests seeking extra comfort and style.", PricePerNight = 198 }
 
 
   );
