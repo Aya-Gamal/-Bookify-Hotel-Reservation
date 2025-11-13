@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Your Cart";
+    Layout = "_Layout.cshtml";
+}
+
+<section class="room-details-section spad">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold" style="color: rgb(139, 69, 19);">Your Reservation Cart</h2>
+
+
+        @if (ViewBag.CartItems != null)
+        {
+            foreach (var item in ViewBag.CartItems)
+            {
+                <div class="card mb-3 p-3 shadow-sm border-0 rounded-3">
+                    <div class="d-flex align-items-center">
+                        <img src="@item.ImageUrl" alt="@item.Name" class="rounded-3 me-3" style="width:120px; height:90px; object-fit:cover;">
+                        <div>
+                            <h5 class="fw-bold mb-1">@item.Name</h5>
+                            <p class="text-muted mb-0">Price per night: <span class="text-success fw-bold">$@item.Price</span></p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="text-center mt-4">
+                <a href="#" class="btn px-4 py-2 rounded-3" style="background-color: rgb(201, 156, 114); color: white;">Proceed to Checkout</a>
+
+            </div>
+        }
+        else
+        {
+            <p class="text-center text-muted">Your cart is empty.</p>
+        }
+    </div>
+</section>
