@@ -1,5 +1,5 @@
 ﻿using Bookify.Data.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
+using Bookify.Data.Models;
 
 namespace Bookify.Data.Data
 {
@@ -44,6 +45,7 @@ namespace Bookify.Data.Data
             // User (AspNetUsers) → Booking (1-to-many)
             builder.Entity<Booking>()
                    .HasOne(b => b.User)
+                   .HasOne(b=>b.User)
                    .WithMany()
                    .HasForeignKey(b => b.UserId)
                    .OnDelete(DeleteBehavior.Restrict);
@@ -86,6 +88,7 @@ namespace Bookify.Data.Data
 
 
             builder.Entity<RoomType>().HasData(
+           builder.Entity<RoomType>().HasData(
       new RoomType { Id = 1, Name = "Single Room", Description = "A cozy room for one guest.", PricePerNight = 100 },
       new RoomType { Id = 2, Name = "Double Room", Description = "A comfortable room for two guests.", PricePerNight = 130 },
       new RoomType { Id = 3, Name = "Suite", Description = "A luxurious suite with living area.", PricePerNight = 2000 },
