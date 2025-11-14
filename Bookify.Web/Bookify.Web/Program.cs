@@ -23,6 +23,16 @@ builder.Services.AddScoped<BookingRepo>();
 
 builder.Services.AddControllersWithViews();
 
+// Add Session 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(60); // مدة تخزين الـ cart في الجلسة
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
 var app = builder.Build();
 
 // ✅ Configure Middleware
@@ -40,6 +50,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 // ✅ Routes
 app.MapControllerRoute(

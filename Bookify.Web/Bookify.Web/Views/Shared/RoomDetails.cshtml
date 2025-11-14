@@ -24,9 +24,30 @@
                             </span>
                         </p>
 
-                        <div class="mt-4 d-flex justify-content-between">
-                            <a href="/Room/Rooms" class="btn btn-outline-secondary px-4">← Back to Rooms</a>
-                            <a href="/Booking/Create/@Model.Id" class="btn btn-primary px-4">Book Now</a>
+                        <div class="mt-4">
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3">
+
+                                <!-- Room basic info -->
+                                <input type="hidden" name="RoomId" value="@Model.Id" />
+                                <input type="hidden" name="RoomName" value="@Model.RoomType.Name" />
+                                <input type="hidden" name="PricePerNight" value="@Model.RoomType.PricePerNight" />
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-2">
+                                        <label>Check-In</label>
+                                        <input type="date" name="CheckIn" class="form-control" required />
+                                    </div>
+
+                                    <div class="col-md-6 mb-2">
+                                        <label>Check-Out</label>
+                                        <input type="date" name="CheckOut" class="form-control" required />
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary w-100 mt-2">Add to Cart</button>
+                            </form>
+                            <a href="/Room/Rooms" class="mt-3 d-block btn btn-outline-secondary px-4">← Back to Rooms</a>
+
                         </div>
                     </div>
                 </div>

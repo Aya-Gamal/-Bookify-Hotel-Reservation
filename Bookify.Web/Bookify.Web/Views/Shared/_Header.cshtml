@@ -63,37 +63,8 @@
                 </li>
 
                 <!-- Mini Cart Dropdown for Offcanvas -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link position-relative" href="#" id="cartDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-shopping-cart fa-lg text-primary"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            2
-                        </span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end p-3 shadow-sm" aria-labelledby="cartDropdown" style="min-width: 300px;">
-                        <li class="d-flex align-items-center mb-2">
-                            <img src="/images/room1.jpg" class="rounded me-2" style="width:50px; height:40px; object-fit:cover;">
-                            <div>
-                                <p class="mb-0 fw-semibold">Deluxe Room</p>
-                                <small class="text-muted">$120/night</small>
-                            </div>
-                        </li>
+                @await Component.InvokeAsync("CartDropdown")
 
-                        <li class="d-flex align-items-center mb-3">
-                            <img src="/images/room2.jpg" class="rounded me-2" style="width:50px; height:40px; object-fit:cover;">
-                            <div>
-                                <p class="mb-0 fw-semibold">Suite Room</p>
-                                <small class="text-muted">$180/night</small>
-                            </div>
-                        </li>
-
-                        <li><hr class="dropdown-divider" /></li>
-
-                        <li class="text-center">
-                            <a href="/Cart" class="btn btn-primary btn-sm w-100 rounded-3">Go to Cart</a>
-                        </li>
-                    </ul>
-                </li>
             }
             else
             {
@@ -196,18 +167,8 @@
 
                                     @if (!User.IsInRole("Admin"))
                                     {
-                                        <li class="dropdown @(currentController == "Cart" ? "active" : "")">
-                                            <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" style="outline:none; border:none; box-shadow:none;">
-                                                <i class="fa fa-shopping-cart"></i> Cart <i class="fa fa-caret-down"></i>
-                                            </a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item" asp-controller="Cart" asp-action="Index">
-                                                        <i class="fa fa-eye"></i> View Cart
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </li>
+                                        @await Component.InvokeAsync("CartDropdown")
+
                                     }
 
                                     <li class="dropdown @(currentController == "Profile" ? "active" : "")">
