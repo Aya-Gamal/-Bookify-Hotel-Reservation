@@ -1,23 +1,121 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Bookify.Web.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Bookify.Controllers
 {
     public class CartController : Controller
     {
-        // GET: /Cart/
+       private const string SessionCartKey = "ReservationCart";
+
+        // Get Cart Items from Session
+        private List<ReservationCartItem> GetCart()
+        {
+            var cart = HttpContext.Session.GetObject<List<ReservationCartItem>>(SessionCartKey);
+            if (cart == null) {
+                cart = new List<ReservationCartItem>();
+                HttpContext.Session.SetObject(SessionCartKey, cart);
+
+            }
+            return cart;
+        }
+
+        private void SaveCart(List<ReservationCartItem> cart)
+        {
+            HttpContext.Session.SetObject(SessionCartKey, cart);
+        }
+
+        // View cart
         public IActionResult Index()
         {
-            // this list will come from the session data
-            var staticCartItems = new List<dynamic>
-            {
-                new { Id = 1, Name = "Deluxe Room", Price = 120, ImageUrl = "/images/gallery/gallery-4.jpg" },
-                new { Id = 2, Name = "Suite Room", Price = 180, ImageUrl = "/images/gallery/gallery-2.jpg" },
-            };
-
-            ViewBag.CartItems = staticCartItems;
-            ViewBag.CartCount = staticCartItems.Count; // For the icon count
-
-            return View("Cart");
+            var cart = GetCart();
+            var total = cart.Sum(i => i.TotalPrice());
+            ViewBag.CartTotal = total;
+            return View(cart);
         }
+
+
+        // Add Item to Cart 
+        [HttpPost]
+        public IActionResult AddToCart(ReservationCartItem item)
+        {
+            // Validate Dates 
+            if (item.CheckIn >= item.CheckOut)
+                return BadRequest("Check out Date must be after Check in Date");
+
+            // initlialize cart
+            var cart = GetCart();
+
+            // Check if item already exists in cart
+            var existingItem = cart.FirstOrDefault(c=>
+            c.RoomId == item.RoomId &&
+            c.CheckIn == item.CheckIn &&
+            c.CheckOut == item.CheckOut);
+
+            if (existingItem != null) {
+                existingItem.Quantity += item.Quantity;
+            }
+            else
+            {
+                cart.Add(item);
+            }
+            SaveCart(cart);
+
+            return RedirectToAction("Index", "Home");
+        }
+        // Increase quantity
+        [HttpPost]
+        public IActionResult Increase(int roomId, DateTime checkIn, DateTime checkOut)
+        {
+            var cart = GetCart();
+
+            var item = cart.FirstOrDefault(c => 
+            c.RoomId == roomId && 
+            c.CheckIn.Date == checkIn.Date && 
+            c.CheckOut.Date == checkOut.Date);
+
+            if (item != null)
+            {
+                item.Quantity++;
+                SaveCart(cart);
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+
+        // Decrease quantity
+        [HttpPost]
+        public IActionResult Decrease(int roomId, DateTime checkIn, DateTime checkOut)
+        {
+            var cart = GetCart();
+            var item = cart.FirstOrDefault(c => c.RoomId == roomId && c.CheckIn.Date == checkIn.Date && c.CheckOut.Date == checkOut.Date);
+            if (item != null)
+            {
+                item.Quantity--;
+                if (item.Quantity <= 0)
+                    cart.Remove(item);
+                SaveCart(cart);
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+
+        // Remove item
+        [HttpPost]
+        public IActionResult Remove(int roomId, DateTime checkIn, DateTime checkOut)
+        {
+            var cart = GetCart();
+            var item = cart.FirstOrDefault(c => c.RoomId == roomId && c.CheckIn.Date == checkIn.Date && c.CheckOut.Date == checkOut.Date);
+            if (item != null)
+            {
+                cart.Remove(item);
+                SaveCart(cart);
+                return RedirectToAction("Index");
+            }
+            return NotFound();
+        }
+
+
+
+
     }
 }

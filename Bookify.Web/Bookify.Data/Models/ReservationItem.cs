@@ -27,12 +27,10 @@ namespace Bookify.Data.Models
         public int Quantity { get; set; } = 1;
 
         // Computed property for number of nights
-        [NotMapped]
-        public int Nights => (CheckOut - CheckIn).Days;
+        public int Nights;
 
         // Computed total price for this item
-        public decimal TotalPrice => PricePerNight * Quantity * Nights;
-
+        public decimal TotalPrice;
         // FK to Reservation
         public int ReservationId { get; set; }
         public virtual Reservation Reservation { get; set; }
