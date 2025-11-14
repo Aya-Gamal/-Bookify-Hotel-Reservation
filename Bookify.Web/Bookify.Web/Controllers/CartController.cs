@@ -10,7 +10,7 @@ namespace Bookify.Controllers
             // this list will come from the session data
             var staticCartItems = new List<dynamic>
             {
-                new { Id = 1, Name = "Deluxe Room", Price = 120, ImageUrl = "/images/gallery/gallery-1.jpg" },
+                new { Id = 1, Name = "Deluxe Room", Price = 120, ImageUrl = "/images/gallery/gallery-4.jpg" },
                 new { Id = 2, Name = "Suite Room", Price = 180, ImageUrl = "/images/gallery/gallery-2.jpg" },
             };
 
