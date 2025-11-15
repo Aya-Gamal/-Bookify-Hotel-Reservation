@@ -46,16 +46,12 @@
 			       <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3"></div>
 
 					<div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
-						<input asp-for="Email" class="input100" type="email" />
-						<span class="focus-input100"></span>
-						<span class="label-input100">Email</span>
+						<input asp-for="Email" class="input100" type="email" placeholder="Email" />
 						<span asp-validation-for="Email" class="text-danger small"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate="Password is required">
-						<input asp-for="Password" class="input100" type="password" />
-						<span class="focus-input100"></span>
-						<span class="label-input100">Password</span>
+						<input asp-for="Password" class="input100" type="password" placeholder="Password" />
 						<span asp-validation-for="Password" class="text-danger small"></span>
 					</div>
 
@@ -80,18 +76,6 @@
 						<button class="login100-form-btn">
 							Login
 						</button>
-					</div>
-
-					<div class="text-center p-t-46 p-b-20">
-						<span class="txt2">
-							or Login using
-						</span>
-					</div>
-
-					<div class="login100-form-social flex-c-m">
-						<a href="#" class="login100-form-social-item flex-c-m bg3 m-r-5">
-							<i class="fa fa-google" aria-hidden="true"></i>
-						</a>
 					</div>
 					 
 					<div class="text-center p-t-20">

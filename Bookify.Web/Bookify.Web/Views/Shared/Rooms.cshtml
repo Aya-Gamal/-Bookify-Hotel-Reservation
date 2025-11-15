@@ -6,22 +6,31 @@
 
 <section class="rooms-section spad">
     <div class="container">
-        <div class="row">
-            @foreach (var room in Model)
-            {
-                <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="room-item">
-                        <img src="~/images/room/room-@(room.Id).jpg" alt="@room.RoomType.Name" />
-                        <div class="ri-text">
-                            <h4>@room.RoomType.Name</h4>
-                            <h3>@room.RoomType.PricePerNight $ <span>/Per night</span></h3>
-                            <p><strong>Room Number:</strong> @room.RoomNumber</p>
-                            <a href="/Room/Details/@room.Id" class="primary-btn">More Details</a>
+        @if (Model != null && Model.Any())
+        {
+            <div class="row">
+                @foreach (var room in Model)
+                {
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="room-item">
+                            <img src="~/images/room/room-@(room.Id).jpg" alt="@room.RoomType?.Name" />
+                            <div class="ri-text">
+                                <h4>@room.RoomType?.Name</h4>
+                                <h3>@room.RoomType?.PricePerNight $ <span>/Per night</span></h3>
+                                <p><strong>Room Number:</strong> @room.RoomNumber</p>
+                                <a href="/Room/Details/@room.Id" class="primary-btn">More Details</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <h4 class="text-muted">No rooms available at the moment.</h4>
+            </div>
+        }
     </div>
 </section>
 
@@ -48,5 +57,4 @@
         .room-item:hover {
             transform: translateY(-5px);
         }
-
 </style>
