@@ -1,8 +1,9 @@
 ﻿using Bookify.Data.Data;
+using Bookify.Data.Models;
 using Bookify.Services.ModelsRepos;
+using Bookify.Web.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Bookify.Web.Areas.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,6 +66,7 @@ using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
 
     string[] roles = { "Admin", "Customer" };
     foreach (var role in roles)
@@ -86,7 +88,18 @@ using (var scope = app.Services.CreateScope())
         };
         var result = await userManager.CreateAsync(admin, adminPass);
         if (result.Succeeded)
+        {
             await userManager.AddToRoleAsync(admin, "Admin");
+            var userId = await userManager.GetUserIdAsync(admin);
+            //user profile creation
+            var profile = new UserProfile
+            {
+                Id = Guid.NewGuid(),
+                UserId = userId
+            };
+            context.UserProfiles.Add(profile);
+            await context.SaveChangesAsync();
+        }
     }
 }
 
