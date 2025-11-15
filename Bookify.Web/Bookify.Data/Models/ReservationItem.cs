@@ -14,6 +14,7 @@ namespace Bookify.Data.Models
 
         [Required]
         public int RoomId { get; set; }  // FK to Room table
+        public Room Room { get; set; }
 
         [Required]
         public decimal PricePerNight { get; set; }
