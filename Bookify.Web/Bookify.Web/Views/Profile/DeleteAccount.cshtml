@@ -1,0 +1,40 @@
+﻿@model Bookify.Web.Models.DeleteAccountViewModel
+@{
+    ViewData["Title"] = "Delete Account";
+    Layout = "_Layout";
+    var themeColor = "#8B4513";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Profile</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Delete Account</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="text-danger">Delete Account</h4>
+                    <p>This will permanently delete your account and your bookings. This action cannot be undone.</p>
+
+                    <form asp-action="DeleteAccount" method="post">
+                        @Html.AntiForgeryToken()
+                        <div class="mb-3">
+                            <input asp-for="Password" type="password" class="form-control" placeholder="Enter your password to confirm" />
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-danger">Delete My Account</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
