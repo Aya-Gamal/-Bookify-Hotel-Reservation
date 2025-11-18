@@ -1,0 +1,163 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container py-5">
+    <div class="row">
+
+        <!-- LEFT SIDE: Payment Form -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm p-4 mb-4">
+
+
+
+                <h2 class="fw-bold mb-0">
+                    Payment Selection
+                </h2>
+                <hr />
+
+                <!-- Credit Card -->
+                <h5 class="fw-bold mb-3">Credit Card</h5>
+
+                <div class="mb-3">
+                    <label class="form-label">Card Number</label>
+                    <input type="text" class="form-control" value="1234 4321 4567 8901" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Name on Card</label>
+                    <input type="text" class="form-control" value="Captain Falcon" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">CVV Code</label>
+                        <input type="password" class="form-control" value="***" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Expiry Date (MM / YY)</label>
+                        <input type="text" class="form-control" value="12 / 24" />
+                    </div>
+                </div>
+
+                <form asp-action="CheckoutSubmit" method="post">
+                    <button type="submit" class="btn btn-gradient w-100 text-white fw-bold mt-2 py-2">
+                        Submit Order
+                    </button>
+                </form>
+
+
+                <div class="text-center my-3 fw-bold">OR</div>
+
+                <div class="text-center mb-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+                         height="35" />
+                </div>
+
+                <button class="btn btn-gradient w-100 text-white fw-bold mt-2 py-2">
+                    Proceed to PayPal website
+                </button>
+                <div class="pt-3">
+                    <a href="~/Home/Index" class="text-dark">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Shopping
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Cart Summary -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm p-4">
+
+                <h4 class="fw-bold mb-3">Cart Summary</h4>
+                <h6 class="text-muted mb-4">3 items</h6>
+
+                <!-- Item -->
+                <div class="d-flex align-items-center mb-4 gap-5">
+                    <img src="/images/gallery/gallery-4.jpg" class="rounded me-2" style="width:100px; height:50px; object-fit:cover;  margin-right:10px;">
+                    <div class="ms-3">
+                        <h6 class="mb-0">Single room</h6>
+                        <small>$24.99</small>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-4 gap-5">
+                    <img src="/images/gallery/gallery-2.jpg" class="rounded me-2" style="width:100px; height:50px; object-fit:cover; margin-right:10px;">
+                    <div class="ms-3">
+                        <h6 class="mb-0">Double room</h6>
+                        <small><s>$24.99</s> <span class="text-danger">$14.99</span></small>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center mb-4 gap-5">
+                    <img src="/images/gallery/gallery-3.jpg" class="rounded me-2" style="width:100px; height:50px; object-fit:cover; margin-right:10px;">
+                    <div class="ms-3">
+                        <h6 class="mb-0">Single room</h6>
+                        <small>$10.99</small>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <strong>$50.97</strong>
+                </div>
+
+                <div class="d-flex justify-content-between text-danger mb-2">
+                    <span>15% Discount (Code: HELLOSPRING)</span>
+                    <strong>- $7.65</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Taxes</span>
+                    <strong>$5.63</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Shipping & Handling</span>
+                    <strong>Free</strong>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+                    <h5>Total</h5>
+                    <h5 class="fw-bold">$48.95 CAD</h5>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* Gradient Button for Submit Order */
+    .btn-gradient {
+        background: linear-gradient(135deg, #f59e0b, #d97706); /* orange-gold gradient */
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+
+
+    .btn-paypal:hover {
+        background-color: #00205c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+</style>
+

@@ -113,9 +113,45 @@ namespace Bookify.Controllers
             }
             return NotFound();
         }
+        // ============================
+        // Checkout Page  (GET)
+        [HttpGet]
+        public IActionResult Checkout()
+        {
+            var cart = GetCart();
 
+            if (!cart.Any())
+            {
+                TempData["Error"] = "Your cart is empty!";
+                return RedirectToAction("Index");
+            }
 
+            return View();
+        }
 
+        // ============================
+        // Checkout Submission (POST)
+        [HttpPost]
+        public IActionResult CheckoutSubmit()
+        {
+            var cart = GetCart();
 
+            if (!cart.Any())
+            {
+                TempData["Error"] = "Your cart is empty!";
+                return RedirectToAction("Index");
+            }
+
+            // Process payment
+
+            return RedirectToAction("Confirmation");
+        }
+
+        // ============================
+        public IActionResult Confirmation()
+        {
+            return View();
+        }
     }
 }
+

@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Confirmation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 text-center">
+
+            <!-- Check Icon -->
+            <div class="icon-check rounded-circle d-inline-flex align-items-center justify-content-center mb-4">
+                <i class="fas fa-check fa-3x text-white"></i>
+            </div>
+
+            <!-- Title -->
+            <h2 class="fw-bold text-success mb-3">Order Confirmed !</h2>
+
+            <!-- Message -->
+            <p class="text-muted">
+                Your order has been placed successfully.
+                <br />
+                Thank you for shopping with us.
+            </p>
+
+            <p class="text-muted mb-4">
+                Get delivery by <strong>Mon, 06 Feb</strong> – <strong>Thu, 09 Feb</strong>
+            </p>
+
+            <!-- Back to Home Button -->
+            <a href="~/Home/Index" class="btn btn-gradient fw-bold py-2 px-4">
+                Back to Home
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Gradient Button */
+    .btn-gradient {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+    /* Circle check icon */
+    .icon-check {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+</style>
