@@ -12,9 +12,9 @@ namespace Bookify.Web.Controllers
     {
         private readonly RoomTypeRepo _roomTypeRepo;
         private readonly RoomRepo _roomRepo;
-        private readonly BookingRepo _bookingRepo;
+        private readonly ReservationRepo _bookingRepo;
 
-        public AdminController(RoomTypeRepo roomTypeRepo, RoomRepo roomRepo, BookingRepo bookingRepo)
+        public AdminController(RoomTypeRepo roomTypeRepo, RoomRepo roomRepo, ReservationRepo bookingRepo)
         {
             _roomTypeRepo = roomTypeRepo;
             _roomRepo = roomRepo;

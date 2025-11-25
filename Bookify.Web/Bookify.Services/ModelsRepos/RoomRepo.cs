@@ -59,9 +59,9 @@ namespace Bookify.Services.ModelsRepos
         public async Task<ResponseHelper<IEnumerable<Room>>> GetAvailableRoomsByDate(DateTime checkin, DateTime checkout)
         {
             var rooms = await dbContext.Rooms
-                .Include(r => r.Bookings)
-                .Where(r => !r.Bookings.Any(b =>
-                    b.CheckInDate < checkout && b.CheckOutDate > checkin)) 
+                .Include(r => r.ReservationItems)
+                .Where(r => !r.ReservationItems.Any(b =>
+                    b.CheckIn < checkout && b.CheckOut > checkin)) 
                 .ToListAsync();
 
             return ResponseHelper<IEnumerable<Room>>.Ok(rooms);

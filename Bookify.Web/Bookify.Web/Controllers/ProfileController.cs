@@ -30,6 +30,7 @@ namespace Bookify.Web.Controllers
         }
 
         // GET: Profile (shows profile form + booking history)
+        /*
         public async Task<IActionResult> Index(int page = 1, string search = "")
         {
             const int PageSize = 10;
@@ -102,6 +103,7 @@ namespace Bookify.Web.Controllers
 
             return View("~/Views/Profile/Index.cshtml", model);
         }
+        */
 
         // POST: Update profile (writes to UserProfile + AspNetUsers.PhoneNumber)
         [HttpPost]
@@ -218,8 +220,9 @@ namespace Bookify.Web.Controllers
             TempData["Success"] = "Password changed successfully.";
             return RedirectToAction(nameof(Index));
         }
-
+        
         // POST: Cancel booking
+        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelBooking(int bookingId)
@@ -251,12 +254,13 @@ namespace Bookify.Web.Controllers
             TempData["Success"] = "Booking cancelled.";
             return RedirectToAction(nameof(Index));
         }
-
+        */
         // GET: Delete Account confirm
         public IActionResult DeleteAccount()
         {
             return View("~/Views/Profile/DeleteAccount.cshtml", new DeleteAccountViewModel());
         }
+        /*
 
         // POST: Delete Account
         [HttpPost]
@@ -295,5 +299,6 @@ namespace Bookify.Web.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+        */
     }
 }

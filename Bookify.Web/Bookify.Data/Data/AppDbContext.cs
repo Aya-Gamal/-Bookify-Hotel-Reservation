@@ -18,7 +18,6 @@ namespace Bookify.Data.Data
 
         public DbSet<Room> Rooms { get; set; }
         public DbSet<RoomType> RoomTypes { get; set; }
-        public DbSet<Booking> Bookings { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<ReservationItem> ReservationItems { get; set; }
@@ -36,42 +35,11 @@ namespace Bookify.Data.Data
                 .HasForeignKey(r => r.RoomTypeId)
                  .OnDelete(DeleteBehavior.Cascade);
 
-            // Room → Booking (1-to-many)
-            builder.Entity<Booking>()
-                .HasOne(b => b.Room)
-                .WithMany(r => r.Bookings)
-                .HasForeignKey(b => b.RoomId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // User (AspNetUsers) → Booking (1-to-many)
-            builder.Entity<Booking>()
-                   .HasOne(b => b.User)
-                   .WithMany()
-                   .HasForeignKey(b => b.UserId)
-                   .OnDelete(DeleteBehavior.Restrict);
+           
+          
 
 
-            // Booking → Payment (1-to-1)
-            builder.Entity<Payment>()
-           .HasOne(p => p.Booking)
-           .WithOne(b => b.Payment)
-           .HasForeignKey<Payment>(p => p.BookingId)
-           .OnDelete(DeleteBehavior.Cascade);
-
-
-            // Store enums as strings
-            builder.Entity<Booking>()
-            .Property(b => b.Status)
-            .HasConversion<string>();
-
-            builder.Entity<Payment>()
-            .Property(p => p.Status)
-            .HasConversion<string>();
-
-            // Decimal precision fixes
-            builder.Entity<Booking>()
-                .Property(b => b.TotalPrice)
-                .HasPrecision(18, 2);   // total digits: 18, decimals: 2
+    
 
             builder.Entity<RoomType>()
                 .Property(rt => rt.PricePerNight)
@@ -85,9 +53,14 @@ namespace Bookify.Data.Data
                 .HasForeignKey(i => i.ReservationId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            // Payment Configuration
+            builder.Entity<Payment>()
+                  .HasOne(p => p.Reservation)
+                  .WithOne(r => r.Payment)
+                  .HasForeignKey<Payment>(p => p.ResverationId) // Corrected the generic type for HasForeignKey
+                  .OnDelete(DeleteBehavior.Cascade);
 
-
-           builder.Entity<RoomType>().HasData(
+            builder.Entity<RoomType>().HasData(
           new RoomType { Id = 1, Name = "Single Room", Description = "A cozy room for one guest.", PricePerNight = 100 },
           new RoomType { Id = 2, Name = "Double Room", Description = "A comfortable room for two guests.", PricePerNight = 130 },
           new RoomType { Id = 3, Name = "Suite", Description = "A luxurious suite with living area.", PricePerNight = 2000 },

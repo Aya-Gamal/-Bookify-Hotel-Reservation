@@ -20,7 +20,6 @@ namespace Bookify.Data.Models
         public int RoomTypeId { get; set; }
         public RoomType RoomType { get; set; }
 
-        public ICollection<Booking> Bookings { get; set; }=new List<Booking>();
         public ICollection<ReservationItem> ReservationItems { get; set; }
 
     }
