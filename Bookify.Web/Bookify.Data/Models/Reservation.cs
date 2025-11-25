@@ -18,7 +18,9 @@ namespace Bookify.Data.Models
 
         public decimal TotalAmount { get; set; }
 
+        public string Status { get; set; } = "Pending"; // e.g., Pending, Paid, Cancelled
         // Navigation property
         public virtual ICollection<ReservationItem> Items { get; set; } = new List<ReservationItem>();
+        public virtual Payment Payment { get; set; }
     }
 }

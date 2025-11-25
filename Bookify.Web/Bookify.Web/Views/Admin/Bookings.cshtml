@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Bookify.Data.Models.Booking>
+﻿@model IEnumerable<Bookify.Data.Models.Reservation>
 
 @{
     ViewData["Title"] = "All Bookings";
@@ -26,14 +26,10 @@
             <table class="table table-bordered table-hover table-striped text-center">
                 <thead class="table-dark" style="background-color:#8B4513; color:white;">
                     <tr>
-                        <th>Booking ID</th>
-                        <th>Room Number</th>
-                        <th>Room Type</th>
-                        <th>User Name</th>
-                        <th>Check-In</th>
-                        <th>Check-Out</th>
-                        <th>Total Price ($)</th>
-                        <th>Status</th>
+                        <th>Reservation ID</th>
+                        <th>Reservation Date</th>
+                        <th>Total Price</th>
+                        <th>Reservation Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -42,20 +38,9 @@
                     {
                         <tr>
                             <td>@b.Id</td>
-                            <td>@b.Room?.RoomNumber</td>
-                            <td>@b.Room?.RoomType?.Name</td>
-                            <td>@b.User.UserName</td>
-                            <td>@b.CheckInDate.ToShortDateString()</td>
-                            <td>@b.CheckOutDate.ToShortDateString()</td>
-                            <td>@b.TotalPrice.ToString("F2")</td>
-                            <td>
-                                <span class="badge
-                                    @(b.Status == Bookify.Data.Models.BookingStatus.Confirmed ? "bg-success" :
-                                      b.Status == Bookify.Data.Models.BookingStatus.Pending ? "bg-warning text-dark" :
-                                      b.Status == Bookify.Data.Models.BookingStatus.Cancelled ? "bg-danger" : "bg-secondary")">
-                                    @b.Status
-                                </span>
-                            </td>
+                            <td>@b.CreatedAt</td>
+                            <td>@b.TotalAmount</td>
+                            <td>@b.Status</td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@b.Id" class="btn btn-info btn-sm">View</a>
                                 <a asp-action="DeleteBooking" asp-route-id="@b.Id" class="btn btn-danger btn-sm"

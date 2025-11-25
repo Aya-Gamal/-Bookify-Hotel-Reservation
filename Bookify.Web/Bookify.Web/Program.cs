@@ -4,6 +4,7 @@ using Bookify.Services.ModelsRepos;
 using Bookify.Web.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,9 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
 // ✅ Repositories
 builder.Services.AddScoped<RoomRepo>();
 builder.Services.AddScoped<RoomTypeRepo>();
-builder.Services.AddScoped<BookingRepo>();
+builder.Services.AddScoped<ReservationRepo>();
+builder.Services.AddScoped<ReservationItemRepo>();
+builder.Services.AddScoped<PaymentRepo>();
 
 builder.Services.AddControllersWithViews();
 
@@ -33,6 +36,9 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+// read stripe keys
+var stripeSection = builder.Configuration.GetSection("Stripe");
+StripeConfiguration.ApiKey = stripeSection.GetValue<string>("SecretKey");
 
 var app = builder.Build();
 
