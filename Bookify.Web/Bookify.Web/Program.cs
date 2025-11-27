@@ -24,6 +24,8 @@ builder.Services.AddScoped<RoomTypeRepo>();
 builder.Services.AddScoped<ReservationRepo>();
 builder.Services.AddScoped<ReservationItemRepo>();
 builder.Services.AddScoped<PaymentRepo>();
+builder.Services.AddScoped<RoomRepo>();
+
 
 builder.Services.AddControllersWithViews();
 

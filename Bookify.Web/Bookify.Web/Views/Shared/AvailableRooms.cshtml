@@ -1,47 +1,151 @@
 ﻿@model IEnumerable<Bookify.Data.Models.Room>
 
+<style>
+    .room-item img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .room-item {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background: #fff;
+        border-radius: 12px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+        padding: 15px;
+    }
+
+        .room-item:hover {
+            transform: translateY(-5px);
+        }
+
+    .primary-btn {
+        border: none;
+        padding: 8px 20px;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 10px;
+        transition: background 0.3s ease;
+    }
+
+    .error-alert {
+        max-width: 500px;
+        margin: 30px auto;
+        padding: 20px 25px;
+        background: #ffdddd;
+        color: #d8000c;
+        border-left: 6px solid #d8000c;
+        border-radius: 10px;
+        font-weight: bold;
+        font-size: 1.1rem;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        animation: slideDown 0.5s ease-out;
+    }
+</style>
+
+@{
+    ViewData["Title"] = "Available Rooms";
+
+    DateTime? ci = ViewBag.CheckIn as DateTime?;
+    DateTime? co = ViewBag.CheckOut as DateTime?;
+
+    if (ci == null || co == null)
+    {
+        <div class="error-alert">
+            Please select check-in and check-out dates.
+        </div>
+        return;
+    }
+
+    DateTime checkIn = ci.Value;
+    DateTime checkOut = co.Value;
+}
 <div class="breadcrumb-section">
-    <div class="container"> 
-        <div class="row"> 
-            <div class="col-lg-12"> 
-                <div class="breadcrumb-text"> 
-                    <h2>Available Rooms</h2> 
-                      </div>
-                      </div> 
-                    </div> 
-                    </div> 
-                    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="breadcrumb-text">
+                    <h2>Available Rooms</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (ViewBag.Error != null)
 {
-    <div class="alert alert-danger">@ViewBag.Error</div>
+    <div class="error-alert">
+        @ViewBag.Error
+    </div>
 }
 else if (Model != null && Model.Any())
 {
     <div class="row">
+
         @foreach (var room in Model)
         {
+            bool isBooked = !room.IsAvailable;
+
+
             <div class="col-lg-4 col-md-6 mb-4">
                 <div class="room-item">
-                    <img src="~/images/room/room-@(room.RoomTypeId).jpg"
+
+                    <!-- Room Image -->
+                    <img src="~/images/room/room-@(room.Id).jpg"
                          onerror="this.src='~/images/logo.png';"
-                         class="card-img-top"
-                         alt="Room Image" />
+                         alt="@room.RoomType?.Name" />
+
                     <div class="ri-text">
-                        <h5 class="card-title">@room.RoomType?.Name (Room: @room.RoomNumber)</h5>
-                        <p class="card-text">@room.RoomType?.Description</p>
-                        <p class="card-text"><strong>Price:</strong> @room.RoomType?.PricePerNight.ToString("C") / night</p>
-                        <p class="card-text"><strong>Status:</strong> @(room.IsAvailable ? "Available" : "Booked")</p>
-                        <a asp-controller="Booking" asp-action="Book" asp-route-id="@room.Id" class="primary-btn">Book Now</a>
+                        <h4>@room.RoomType?.Name</h4>
+
+                        <h3>
+                            @room.RoomType?.PricePerNight.ToString("0.00") $
+                            <span>/Per night</span>
+                        </h3>
+
+                        <p><strong>Room Number:</strong> @room.RoomNumber</p>
+
+                        @if (!isBooked)
+                        {
+                            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="RoomId" value="@room.Id" />
+                                <input type="hidden" name="RoomName" value="@room.RoomType?.Name" />
+                                <input type="hidden" name="PricePerNight" value="@room.RoomType?.PricePerNight" />
+                                <input type="hidden" name="CheckIn" value="@ViewBag.CheckIn" />
+                                <input type="hidden" name="CheckOut" value="@ViewBag.CheckOut" />
+                                <input type="hidden" name="Quantity" value="1" />
+
+                                <button type="submit" class="primary-btn">Add to Cart</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <p class="text-danger"><strong>Status:</strong> Booked</p>
+                        }
                     </div>
+
                 </div>
             </div>
         }
+
     </div>
 }
 else
 {
-    <div class="alert alert-info text-center">
-        No available rooms found for the selected dates.
+    <div class="text-center py-5">
+        <h4 class="text-muted">No available rooms for the selected dates.</h4>
     </div>
 }
+
+</div>
+</section>
+
 

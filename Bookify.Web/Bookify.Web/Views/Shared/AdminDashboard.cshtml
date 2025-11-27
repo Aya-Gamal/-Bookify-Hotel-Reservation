@@ -39,6 +39,16 @@
                 </a>
             </div>
 
+            <!-- Reset Bookings -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <form asp-controller="Payment" asp-action="ResetBookings" method="post" class="dashboard-link">
+                    <button type="submit" class="dashboard-item text-center reset-btn-card" style="width:100%; border:none; background:none;">
+                        <i class="fa fa-refresh fa-3x mb-3" style="color:#D2A679;"></i>
+                        <h4 style="color:#D2A679;">Reset All Bookings</h4>
+                    </button>
+                </form>
+            </div>
+
         </div>
     </div>
 </section>
@@ -73,4 +83,6 @@
             margin-bottom: 0;
             font-weight: 600;
         }
+
+   
 </style>
