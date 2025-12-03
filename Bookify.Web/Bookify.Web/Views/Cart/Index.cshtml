@@ -122,9 +122,10 @@
                                         <h5>€ @totalPrice</h5>
                                     </div>
 
-                                    <form method="get" asp-action="Checkout" asp-controller="Cart">
-                                        <button class="btn btn-gradient btn-lg w-100">Proceed to Checkout</button>
+                                    <form method="get" asp-controller="Payment" asp-action="Index">
+                                        <button type="submit" class="btn btn-gradient btn-lg w-100">Proceed to Checkout</button>
                                     </form>
+
 
 
 

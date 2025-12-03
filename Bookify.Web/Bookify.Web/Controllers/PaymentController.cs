@@ -13,13 +13,17 @@ namespace Bookify.Web.Controllers
         private readonly ReservationItemRepo _itemRepo;
         private readonly PaymentRepo _paymentRepo;
         private readonly IConfiguration _config;
+         private readonly AppDbContext _dbContext;
+        private readonly RoomRepo _roomRepo;
 
-        public PaymentController(ReservationRepo reservationRepo, ReservationItemRepo itemRepo,PaymentRepo paymentRepo ,IConfiguration config)
+
+        public PaymentController(ReservationRepo reservationRepo, ReservationItemRepo itemRepo,PaymentRepo paymentRepo ,IConfiguration config, RoomRepo roomRepo)
         {
             _reservationRepo = reservationRepo;
             _itemRepo = itemRepo;
             _config = config;
             _paymentRepo = paymentRepo;
+            _roomRepo = roomRepo;
         }
         // Show Payment Page
         public IActionResult Index()
@@ -169,7 +173,7 @@ namespace Bookify.Web.Controllers
 
             await _paymentRepo.Add(payment);
 
-            reservation.Status = "Pending Payment";
+            reservation.Status = "Cash in hotel";
             await _reservationRepo.Update(reservation);
 
             HttpContext.Session.Remove("ReservationCart");
@@ -177,6 +181,39 @@ namespace Bookify.Web.Controllers
             // Success Page
             return RedirectToAction("Success", new { reservationId = reservation.Id });
         }
+
+        //================
+
+        //Reset rooms availibility
+
+        [HttpPost]
+        public async Task<IActionResult> ResetBookings()
+        {
+            // Remove all reservation items
+            var allItems = _itemRepo.GetAll().Result.Data;
+            foreach (var item in allItems)
+            {
+                await _itemRepo.Delete(item);
+            }
+
+            // Remove all reservations
+            var allReservations = _reservationRepo.GetAll().Result.Data;
+            foreach (var res in allReservations)
+            {
+                await _reservationRepo.Delete(res);
+            }
+
+            // Reset room availability to true
+            var allRooms = await _roomRepo.GetAllRooms();
+            foreach (var room in allRooms.Data)
+            {
+                room.IsAvailable = true;
+                await _roomRepo.Update(room);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
+
 
     }
 

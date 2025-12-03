@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Room Details";
+
+    bool isBooked = ViewBag.IsBooked != null ? (bool)ViewBag.IsBooked : false;
 }
 
 <section class="rooms-section spad">
@@ -15,40 +17,66 @@
                         <h4 class="text-primary">@Model.RoomType.Name</h4>
                         <h3>@Model.RoomType.PricePerNight $ <span>/Per night</span></h3>
                         <p class="text-muted">@Model.RoomType.Description</p>
-
                         <p><strong>Room Number:</strong> @Model.RoomNumber</p>
-                        <p>
-                            <strong>Status:</strong>
-                            <span class="@(Model.IsAvailable ? "text-success" : "text-danger")">
-                                @(Model.IsAvailable ? "Available" : "Booked")
-                            </span>
-                        </p>
 
-                        <div class="mt-4">
+                        <!-- =========   Check Availability + Dates ========= -->
+                        <form method="get" asp-action="Details" class="mt-3">
+                            <input type="hidden" name="id" value="@Model.Id" />
+
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <label>Check-In</label>
+                                    <input type="date" name="checkIn" class="form-control"
+                                           value="@ViewBag.CheckIn" required />
+                                </div>
+
+                                <div class="col-md-6 mb-2">
+                                    <label>Check-Out</label>
+                                    <input type="date" name="checkOut" class="form-control"
+                                           value="@ViewBag.CheckOut" required />
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn btn-secondary w-100">
+                                
+                                Check Availability
+                            </button>
+
+                            <a href="/Room/Rooms" class="btn btn-outline-secondary w-100 mt-2">
+                                ← Back to Home
+                            </a>
+                        </form>
+
+
+                        <!-- =========  زر Add to Cart أو Booked ========= -->
+                        @if (ViewBag.CheckIn != null && ViewBag.CheckOut != null)
+                        {
                             <form asp-controller="Cart" asp-action="AddToCart" method="post" class="mt-3">
-
-                                <!-- Room basic info -->
                                 <input type="hidden" name="RoomId" value="@Model.Id" />
                                 <input type="hidden" name="RoomName" value="@Model.RoomType.Name" />
                                 <input type="hidden" name="PricePerNight" value="@Model.RoomType.PricePerNight" />
+                                <input type="hidden" name="CheckIn" value="@ViewBag.CheckIn" />
+                                <input type="hidden" name="CheckOut" value="@ViewBag.CheckOut" />
 
-                                <div class="row">
-                                    <div class="col-md-6 mb-2">
-                                        <label>Check-In</label>
-                                        <input type="date" name="CheckIn" class="form-control" required />
-                                    </div>
+                                @if (isBooked)
+                                {
+                                    <button class="btn btn-danger w-100" disabled>
+                                        Booked
+                                    </button>
 
-                                    <div class="col-md-6 mb-2">
-                                        <label>Check-Out</label>
-                                        <input type="date" name="CheckOut" class="form-control" required />
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary w-100 mt-2">Add to Cart</button>
+                                    <p class="text-danger text-center mt-2">
+                                        This room is booked for the selected dates.
+                                    </p>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        Add to Cart
+                                    </button>
+                                }
                             </form>
-                            <a href="/Room/Rooms" class="mt-3 d-block btn btn-outline-secondary px-4">← Back to Rooms</a>
+                        }
 
-                        </div>
                     </div>
                 </div>
             </div>
@@ -56,5 +84,85 @@
     </div>
 </section>
 
-<!-- مسافة عشان الفوتر -->
+
 <div style="margin-bottom: 60px;"></div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // التاريخ اليوم بصيغة yyyy-mm-dd
+        function todayYMD() {
+            const d = new Date();
+            return d.toISOString().split('T')[0];
+        }
+
+        // اضبط min لكل input[name="checkIn"] و attach validation
+        const checkInInputs = document.querySelectorAll("input[name='checkIn']");
+        const checkOutInputs = document.querySelectorAll("input[name='checkOut']");
+
+        // ضبط الحد الأدنى لــ check-in لجميع الحقول
+        checkInInputs.forEach(function (inp) {
+            try {
+                inp.setAttribute('min', todayYMD());
+            } catch (e) { /* ignore */ }
+
+            // لو المستخدم غيّر الcheck-in، حدّث min للـ checkOut المقابل إن وُجد
+            inp.addEventListener('change', function () {
+                const form = inp.closest('form');
+                const co = form ? form.querySelector("input[name='checkOut']") : null;
+                if (co) {
+                    // جعل أدنى تاريخ للـ checkout هو اليوم التالي للـ checkin
+                    if (inp.value) {
+                        const ciDate = new Date(inp.value);
+                        ciDate.setDate(ciDate.getDate() + 1);
+                        const minCo = ciDate.toISOString().split('T')[0];
+                        co.setAttribute('min', minCo);
+
+                        // إذا كانت قيمة checkout أقل من min، نمسحها
+                        if (co.value && co.value < minCo) {
+                            co.value = "";
+                        }
+                    } else {
+                        co.removeAttribute('min');
+                        co.setAttribute('min', todayYMD());
+                    }
+                }
+            }, { passive: true });
+        });
+
+        // ضبط الحد الأدنى الافتراضي للـ checkout لو موجود
+        checkOutInputs.forEach(function (co) {
+            try {
+                co.setAttribute('min', todayYMD());
+            } catch (e) { /* ignore */ }
+        });
+
+        // Attach submit validation to أي فرم يحتوي على checkIn input
+        const forms = new Set();
+        checkInInputs.forEach(i => { if (i.closest('form')) forms.add(i.closest('form')); });
+        forms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                const ci = form.querySelector("input[name='checkIn']");
+                const co = form.querySelector("input[name='checkOut']");
+                const today = todayYMD();
+
+                if (!ci || !co) return; // لو واحد من الاتنين مش موجود، نمشي
+
+                // تأكد أن checkIn مش قبل اليوم
+                if (ci.value && ci.value < today) {
+                    e.preventDefault();
+                    alert("Check-In date cannot be earlier than today!");
+                    return;
+                }
+
+                // تأكد أن checkout بعد checkin
+                if (ci.value && co.value) {
+                    if (co.value <= ci.value) {
+                        e.preventDefault();
+                        alert("Check-Out must be after Check-In!");
+                        return;
+                    }
+                }
+            }, { passive: false });
+        });
+    });
+</script>

@@ -16,15 +16,20 @@ namespace Bookify.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckAvailability(DateTime checkIn, DateTime checkOut)
         {
-            var response = await _roomRepo.GetAvailableRoomsByDate(checkIn, checkOut);
-
-            if (response.Error)
+            if (checkOut <= checkIn)
             {
-                ViewBag.Error = response.Message;
+                ViewBag.Error = "Check-Out date must be after Check-In date.";
                 return View("AvailableRooms", new List<Room>());
             }
 
-            return View("AvailableRooms", response.Data);
+            // نرسل التاريخ كـ DateTime مش string
+            ViewBag.CheckIn = checkIn;
+            ViewBag.CheckOut = checkOut;
+
+            // استدعاء الريبو
+            var rooms = await _roomRepo.GetRoomsWithBookingStatus(checkIn, checkOut);
+
+            return View("AvailableRooms", rooms);
         }
     }
 }
