@@ -425,3 +425,83 @@
 </body>
 
 </html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // التاريخ اليوم بصيغة yyyy-mm-dd
+        function todayYMD() {
+            const d = new Date();
+            return d.toISOString().split('T')[0];
+        }
+
+        // اضبط min لكل input[name="checkIn"] و attach validation
+        const checkInInputs = document.querySelectorAll("input[name='checkIn']");
+        const checkOutInputs = document.querySelectorAll("input[name='checkOut']");
+
+        // ضبط الحد الأدنى لــ check-in لجميع الحقول
+        checkInInputs.forEach(function (inp) {
+            try {
+                inp.setAttribute('min', todayYMD());
+            } catch (e) { /* ignore */ }
+
+            // لو المستخدم غيّر الcheck-in، حدّث min للـ checkOut المقابل إن وُجد
+            inp.addEventListener('change', function () {
+                const form = inp.closest('form');
+                const co = form ? form.querySelector("input[name='checkOut']") : null;
+                if (co) {
+                    // جعل أدنى تاريخ للـ checkout هو اليوم التالي للـ checkin
+                    if (inp.value) {
+                        const ciDate = new Date(inp.value);
+                        ciDate.setDate(ciDate.getDate() + 1);
+                        const minCo = ciDate.toISOString().split('T')[0];
+                        co.setAttribute('min', minCo);
+
+                        // إذا كانت قيمة checkout أقل من min، نمسحها
+                        if (co.value && co.value < minCo) {
+                            co.value = "";
+                        }
+                    } else {
+                        co.removeAttribute('min');
+                        co.setAttribute('min', todayYMD());
+                    }
+                }
+            }, { passive: true });
+        });
+
+        // ضبط الحد الأدنى الافتراضي للـ checkout لو موجود
+        checkOutInputs.forEach(function (co) {
+            try {
+                co.setAttribute('min', todayYMD());
+            } catch (e) { /* ignore */ }
+        });
+
+        // Attach submit validation to أي فرم يحتوي على checkIn input
+        const forms = new Set();
+        checkInInputs.forEach(i => { if (i.closest('form')) forms.add(i.closest('form')); });
+        forms.forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                const ci = form.querySelector("input[name='checkIn']");
+                const co = form.querySelector("input[name='checkOut']");
+                const today = todayYMD();
+
+                if (!ci || !co) return; // لو واحد من الاتنين مش موجود، نمشي
+
+                // تأكد أن checkIn مش قبل اليوم
+                if (ci.value && ci.value < today) {
+                    e.preventDefault();
+                    alert("Check-In date cannot be earlier than today!");
+                    return;
+                }
+
+                // تأكد أن checkout بعد checkin
+                if (ci.value && co.value) {
+                    if (co.value <= ci.value) {
+                        e.preventDefault();
+                        alert("Check-Out must be after Check-In!");
+                        return;
+                    }
+                }
+            }, { passive: false });
+        });
+    });
+</script>

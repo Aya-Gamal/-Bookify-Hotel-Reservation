@@ -9,10 +9,10 @@ namespace Bookify.Web.Controllers
 {
     public class BookingsController : Controller
     {
-        private readonly BookingRepo _bookingRepo;
+        private readonly ReservationRepo _bookingRepo;
         private readonly AppDbContext _context;
 
-        public BookingsController(BookingRepo bookingRepo , AppDbContext appContext)
+        public BookingsController(ReservationRepo bookingRepo , AppDbContext appContext)
         {
             _bookingRepo = bookingRepo;
             _context = appContext;
@@ -23,9 +23,7 @@ namespace Bookify.Web.Controllers
         public async Task<IActionResult> Bookings()
         {
 
-            var bookings = await _context.Bookings
-            .Include(x=>x.User).Include(b => b.Room)
-            .ThenInclude(r => r.RoomType)
+            var bookings = await _context.Reservations
             .ToListAsync();
             return View("~/Views/Admin/Bookings.cshtml", bookings); // Make sure your view is named GetAllBookings.cshtml
         }

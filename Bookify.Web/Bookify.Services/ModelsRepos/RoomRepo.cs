@@ -50,28 +50,24 @@ namespace Bookify.Services.ModelsRepos
 
                 var rooms = await dbContext.Rooms
                 .Include(x => x.RoomType)
+                .Include(r => r.ReservationItems)
                 .ToListAsync();  
             return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
 
 
         }
 
-        public async Task<ResponseHelper<IEnumerable<Room>>> GetAvailableRoomsByDate(DateTime checkin, DateTime checkout)
-        {
-            var rooms = await dbContext.Rooms
-                .Include(r => r.Bookings)
-                .Where(r => !r.Bookings.Any(b =>
-                    b.CheckInDate < checkout && b.CheckOutDate > checkin)) 
-                .ToListAsync();
-
-            return ResponseHelper<IEnumerable<Room>>.Ok(rooms);
-        }
-
         public async Task<ResponseHelper<Room>> GetRoomById(int id)
         {
-            var roomres = await genericRepo.Find(x => x.Id == id);
+            var room = await dbContext.Rooms
+       .Include(r => r.RoomType)
+       .Include(r => r.ReservationItems)    
+       .FirstOrDefaultAsync(r => r.Id == id);
 
-            return ResponseHelper<Room>.Ok(roomres.Data);
+            if (room == null)
+                return ResponseHelper<Room>.Fail("Room not found.");
+
+            return ResponseHelper<Room>.Ok(room);
         }
 
 
@@ -87,6 +83,37 @@ namespace Bookify.Services.ModelsRepos
         {
             return await genericRepo.Update(room);
         }
+        //========
+
+
+        // Get rooms according availbility dates
+        public async Task<IEnumerable<Room>> GetRoomsWithBookingStatus(DateTime checkIn, DateTime checkOut)
+        {
+            var rooms = await dbContext.Rooms
+                .Include(r => r.RoomType)
+                .Include(r => r.ReservationItems)
+                .ToListAsync();
+
+            foreach (var room in rooms)
+            {
+                
+                var hasConflict = room.ReservationItems.Any(res =>
+                    checkIn < res.CheckOut &&
+                    checkOut > res.CheckIn
+                );
+
+                room.IsAvailable = !hasConflict;
+                room.ReservationItems = room.ReservationItems
+                    .Where(res => checkIn < res.CheckOut && checkOut > res.CheckIn)
+                    .ToList();
+            }
+
+            return rooms;
+        }
+
+
+
+
 
     }
 }

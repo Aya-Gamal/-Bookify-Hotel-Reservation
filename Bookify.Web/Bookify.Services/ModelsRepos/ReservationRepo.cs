@@ -11,35 +11,39 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Bookify.Services.ModelsRepos
 {
-    public class BookingRepo
+    public class ReservationRepo
     {
 
 
         AppDbContext dbContext;
-        DbSet<Booking> dbSet;
-        GenericRepository<Booking> genericRepo;
+        GenericRepository<Reservation> genericRepo;
 
-        public BookingRepo(AppDbContext context)
+        public ReservationRepo(AppDbContext context)
         {
             dbContext = context;
-            dbSet = dbContext.Set<Booking>();
+            var dbSet = dbContext.Set<Reservation>();
             genericRepo = new(dbContext);
         }
 
-        public async Task<ResponseHelper<IEnumerable<Booking>>> GetAll()
+        public async Task<ResponseHelper<IEnumerable<Reservation>>> GetAll()
         {
             return await genericRepo.FindAll();
         }
 
-        public async Task<ResponseHelper> Add(Booking booking)
+        public async Task<ResponseHelper<Reservation>> Get(int id)
+        {
+            return await genericRepo.Find(r => r.Id == id);
+        }
+
+        public async Task<ResponseHelper> Add(Reservation booking)
         {
             return await genericRepo.Add(booking);
         }
-        public async Task<ResponseHelper> Delete(Booking booking)
+        public async Task<ResponseHelper> Delete(Reservation booking)
         {
             return await genericRepo.Delete(booking);
         }
-        public async Task<ResponseHelper> Update(Booking booking)
+        public async Task<ResponseHelper> Update(Reservation booking)
         {
             return await genericRepo.Update(booking);
         }

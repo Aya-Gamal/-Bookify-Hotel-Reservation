@@ -1,0 +1,159 @@
+﻿@model Bookify.Web.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "My Profile";
+    Layout = "_Layout";
+    var themeColor = "#8B4513";
+}
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <div class="col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Edit Profile</h5>
+
+                    @if (TempData["Success"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["Success"]</div>
+                    }
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">@TempData["Error"]</div>
+                    }
+
+                    <form asp-action="Update" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="ProfileId" value="@Model.ProfileId" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Full name</label>
+                            <input name="FullName" class="form-control" value="@Model.FullName" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <input name="Address" class="form-control" value="@Model.Address" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Birth Date</label>
+                            <input type="date" name="BirthDate" class="form-control"
+                                   value="@(Model.BirthDate?.ToString("yyyy-MM-dd"))" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email (read-only)</label>
+                            <input class="form-control" value="@Model.Email" readonly />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input name="PhoneNumber" class="form-control" value="@Model.PhoneNumber" />
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn" style="background:@themeColor; color:#fff;">Save Changes</button>
+                            <a asp-action="ChangePassword" class="btn btn-outline-secondary">Change Password</a>
+                            <a asp-action="DeleteAccount" class="btn btn-outline-danger">Delete Account</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Booking History</h5>
+
+                    <form class="mb-3" asp-action="Index" method="get">
+                        <div class="input-group">
+                            <input name="search" value="@Model.SearchTerm" class="form-control" placeholder="Search by room or type" />
+                            <button class="btn btn-outline-secondary" type="submit">Search</button>
+                        </div>
+                    </form>
+
+                    @if (!Model.BookingHistory.Any())
+                    {
+                        <div class="text-muted">No bookings found.</div>
+                    }
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Room</th>
+                                        <th>Type</th>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                        <th>Total</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.BookingHistory)
+                                    {
+                                        <tr>
+                                            <td>@item.RoomNumber</td>
+                                            <td>@item.RoomType</td>
+                                            <td>@item.CheckIn.ToString("yyyy-MM-dd")</td>
+                                            <td>@item.CheckOut.ToString("yyyy-MM-dd")</td>
+                                            <td>@item.TotalPrice.ToString("F2") EGP</td>
+                                            <td class="text-end">
+                                                @if (item.CanCancel)
+                                                {
+                                                    <form method="post" asp-action="CancelBooking" style="display:inline;">
+                                                        @Html.AntiForgeryToken()
+                                                        <input type="hidden" name="bookingId" value="@item.BookingId" />
+                                                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">—</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center mt-3">
+                                @{
+                                    var prevDisabled = Model.PageIndex <= 1 ? "disabled" : "";
+                                    var nextDisabled = Model.PageIndex >= Model.TotalPages ? "disabled" : "";
+                                }
+                                <li class="page-item @prevDisabled">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageIndex - 1, search = Model.SearchTerm })">Previous</a>
+                                </li>
+
+                                @for (int p = 1; p <= Model.TotalPages; p++)
+                                {
+                                    var active = p == Model.PageIndex ? "active" : "";
+                                    <li class="page-item @active">
+                                        <a class="page-link" href="@Url.Action("Index", new { page = p, search = Model.SearchTerm })">@p</a>
+                                    </li>
+                                }
+
+                                <li class="page-item @nextDisabled">
+                                    <a class="page-link" href="@Url.Action("Index", new { page = Model.PageIndex + 1, search = Model.SearchTerm })">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

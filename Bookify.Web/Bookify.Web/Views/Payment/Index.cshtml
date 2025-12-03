@@ -1,0 +1,128 @@
+﻿@model List<ReservationCartItem>
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var total = Model.Sum(x => x.TotalPrice());
+    var itemCount = Model.Count;
+    var finalTotal = total + 5.63m; // Adding fixed tax for demonstration
+}
+
+<!-- Font Awesome -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<div class="container py-5">
+    <div class="row">
+
+        <!-- LEFT SIDE: Payment Form -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm p-4 mb-4">
+
+
+
+                <h2 class="fw-bold mb-0">
+                    Payment Selection
+                </h2>
+                <hr />
+                <!-- PAY WITH STRIPE -->
+                <form asp-action="CreateStripeSession" method="post">
+                    <button type="submit"
+                            class="btn btn-gradient w-100 text-white fw-bold py-2 mb-4">
+                        Pay with Credit Card (Stripe)
+                    </button>
+                </form>
+
+
+                <div class="text-center my-3 fw-bold">OR</div>
+
+                <form asp-action="CashPayment" method="post">
+                    <button type="submit" class="btn btn-warning w-100 text-dark fw-bold mt-3 py-2">
+                        Pay at Hotel (Cash)
+                    </button>
+                </form>
+
+                <div class="pt-3">
+                    <a href="~/Cart/Index" class="text-dark">
+                        <i class="fas fa-arrow-left me-2"></i> Back to Cart
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT SIDE: Cart Summary -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm p-4">
+
+                <h4 class="fw-bold mb-3">Cart Summary</h4>
+                <h6 class="text-muted mb-4">@itemCount items</h6>
+
+                @foreach (var item in Model)
+                {
+                    <div class="d-flex align-items-center mb-4 gap-5">
+                        <img src="/images/room/room-@(item.RoomId).jpg" class="rounded me-2" style="width:100px; height:50px; object-fit:cover;  margin-right:10px;">
+                        <div class="ms-3">
+                            <h6 class="mb-0">@item.RoomName</h6>
+                            <small>@item.TotalPrice()</small><br />
+                            <small class="text-muted">@item.Nights() nights</small>
+                        </div>
+                    </div>
+                }
+
+                <hr />
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal</span>
+                    <strong>@total</strong>
+                </div>
+
+
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Taxes</span>
+                    <strong>$5.63</strong>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Shipping & Handling</span>
+                    <strong>Free</strong>
+                </div>
+
+                <hr />
+
+                <div class="d-flex justify-content-between">
+                    <h5>Total</h5>
+                    <h5 class="fw-bold">@finalTotal</h5>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+<style>
+    /* Gradient Button for Submit Order */
+    .btn-gradient {
+        background: linear-gradient(135deg, #f59e0b, #d97706); /* orange-gold gradient */
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(135deg, #d97706, #b45309);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+
+
+    .btn-paypal:hover {
+        background-color: #00205c;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+</style>
+
