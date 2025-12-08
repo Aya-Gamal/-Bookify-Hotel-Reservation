@@ -30,60 +30,60 @@ namespace Bookify.Web.Controllers
         }
 
         // GET: Profile (shows profile form + booking history)
-        /*
-        public async Task<IActionResult> Index(int page = 1, string search = "")
-        {
-            const int PageSize = 10;
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null) return Challenge();
 
-            // Load or create profile
+        [HttpGet]
+        public async Task<IActionResult> Index(string search, int page = 1)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Challenge();
+
+            // Load profile
             var profile = await _db.UserProfiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+
             if (profile == null)
             {
                 profile = new UserProfile
                 {
                     Id = Guid.NewGuid(),
-                    UserId = user.Id,
-                    FullName = null,
-                    Address = null,
-                    BirthDate = null
+                    UserId = user.Id
                 };
+
                 _db.UserProfiles.Add(profile);
                 await _db.SaveChangesAsync();
             }
+            var reservationsQuery = _db.Reservations
+     .Include(r => r.Items)
+         .ThenInclude(i => i.Room)
+             .ThenInclude(rt => rt.RoomType)
+     .Where(r => r.UserId == user.Id)
+     .AsQueryable();   // important
 
-            // Bookings query
-            var baseQuery = _db.Bookings
-                .Include(b => b.Room)
-                    .ThenInclude(r => r.RoomType)
-                .Where(b => b.UserId == user.Id);
-
-            if (!string.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrEmpty(search))
             {
-                baseQuery = baseQuery.Where(b =>
-                    b.Room.RoomNumber.Contains(search) ||
-                    b.Room.RoomType.Name.Contains(search));
+                reservationsQuery = reservationsQuery.Where(r =>
+                    r.Items.Any(i =>
+                        EF.Functions.Like(i.Room.RoomNumber, $"%{search}%") ||
+                        EF.Functions.Like(i.Room.RoomType.Name, $"%{search}%")
+                    )
+                );
             }
 
-            var total = await baseQuery.CountAsync();
-            var totalPages = Math.Max(1, (int)Math.Ceiling(total / (double)PageSize));
-            page = Math.Clamp(page, 1, totalPages);
+            // Default ordering AFTER filtering
+            reservationsQuery = reservationsQuery.OrderByDescending(r => r.CreatedAt);
 
-            var bookings = await baseQuery
-                .OrderByDescending(b => b.Id)
-                .Skip((page - 1) * PageSize)
-                .Take(PageSize)
-                .Select(b => new BookingHistoryItem
-                {
-                    BookingId = b.Id,
-                    RoomNumber = b.Room.RoomNumber,
-                    RoomType = b.Room.RoomType.Name,
-                    CheckIn = b.CheckInDate,
-                    CheckOut = b.CheckOutDate,
-                    TotalPrice = b.TotalPrice,
-                    CanCancel = b.CheckInDate > DateTime.UtcNow
-                })
+
+
+
+
+            var pageSize = 10;  // Number of reservations per page
+            var totalReservations = await reservationsQuery.CountAsync();
+            var totalPages = (int)Math.Ceiling((double)totalReservations / pageSize);
+
+            // Fetch reservations with pagination
+            var reservations = await reservationsQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             var model = new ProfileViewModel
@@ -95,15 +95,14 @@ namespace Bookify.Web.Controllers
                 BirthDate = profile.BirthDate,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
-                BookingHistory = bookings,
+                Reservations = reservations,
+                SearchTerm = search,
                 PageIndex = page,
-                TotalPages = totalPages,
-                SearchTerm = search
+                TotalPages = totalPages
             };
 
             return View("~/Views/Profile/Index.cshtml", model);
         }
-        */
 
         // POST: Update profile (writes to UserProfile + AspNetUsers.PhoneNumber)
         [HttpPost]
@@ -300,5 +299,6 @@ namespace Bookify.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
         */
+
     }
 }

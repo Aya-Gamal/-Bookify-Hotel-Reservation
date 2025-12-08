@@ -1,0 +1,70 @@
+﻿@model Bookify.Data.Models.Reservation
+
+@{
+    ViewData["Title"] = "Reservation Details";
+    Layout = "_Layout";
+}
+
+<section class="spad">
+    <div class="container">
+
+        <h2 class="text-center mb-4" style="color:#8B4513;">Reservation Details</h2>
+
+        <!-- Reservation Main Info -->
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>Reservation ID</th>
+                <td>@Model.Id</td>
+            </tr>
+            <tr>
+                <th>User ID</th>
+                <td>@Model.UserId</td>
+            </tr>
+            <tr>
+                <th>Created At</th>
+                <td>@Model.CreatedAt</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>@Model.Status</td>
+            </tr>
+            <tr>
+                <th>Total Amount</th>
+                <td>@Model.TotalAmount</td>
+            </tr>
+        </table>
+
+        <hr />
+
+        <!-- Items Details -->
+        <h4 style="color:#8B4513;">Booked Rooms</h4>
+
+        <table class="table table-bordered table-hover text-center">
+            <thead class="table-dark" style="background-color:#8B4513; color:white;">
+                <tr>
+                    <th>Price Per Night</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Nights</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>@item.PricePerNight</td>
+                        <td>@item.CheckIn.ToShortDateString()</td>
+                        <td>@item.CheckOut.ToShortDateString()</td>
+                        <td>@( (item.CheckOut - item.CheckIn).Days )</td>
+                        <td>@item.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <a asp-action="Bookings" class="btn btn-secondary mt-3">Back to All Bookings</a>
+
+    </div>
+</section>

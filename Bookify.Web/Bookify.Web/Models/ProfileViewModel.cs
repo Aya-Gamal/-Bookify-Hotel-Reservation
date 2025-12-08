@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bookify.Data.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Bookify.Web.Models
@@ -18,7 +19,7 @@ namespace Bookify.Web.Models
         public string Email { get; set; } // From AspNetUsers
         public string PhoneNumber { get; set; } // From IdentityUser.PhoneNumber
 
-        public List<BookingHistoryItem> BookingHistory { get; set; } = new();
+        public List<Reservation> Reservations { get; set; } = new();
 
         public int PageIndex { get; set; }
         public int TotalPages { get; set; }
