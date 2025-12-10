@@ -27,5 +27,41 @@ namespace Bookify.Web.Controllers
             .ToListAsync();
             return View("~/Views/Admin/Bookings.cshtml", bookings); // Make sure your view is named GetAllBookings.cshtml
         }
+
+        public IActionResult Details(int id)
+        {
+            var reservation = _context.Reservations
+          .Where(r => r.Id == id)
+          .Include(r => r.Items)
+          .ThenInclude(i => i.Room)
+          .FirstOrDefault();
+
+            if (reservation == null)
+            {
+                TempData["ErrorMessage"] = "Reservation not found!";
+                return RedirectToAction("Bookings");
+            }
+
+            return View("~/Views/Admin/Details.cshtml", reservation);
+        }
+
+
+        public IActionResult DeleteBooking(int id)
+        {
+            var reservation = _context.Reservations.Find(id);
+
+            if (reservation == null)
+            {
+                TempData["ErrorMessage"] = "Reservation not found!";
+                return RedirectToAction("Bookings");
+            }
+
+            _context.Reservations.Remove(reservation);
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Reservation deleted successfully!";
+            return RedirectToAction("Bookings");
+        }
+
     }
 }

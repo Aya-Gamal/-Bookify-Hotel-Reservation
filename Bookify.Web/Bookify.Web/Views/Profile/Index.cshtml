@@ -80,9 +80,9 @@
                         </div>
                     </form>
 
-                    @if (!Model.BookingHistory.Any())
+                    @if (!Model.Reservations.Any())
                     {
-                        <div class="text-muted">No bookings found.</div>
+                        <div class="text-muted">No reservations found.</div>
                     }
                     else
                     {
@@ -99,33 +99,27 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.BookingHistory)
+                                    @foreach (var item in Model.Reservations)
                                     {
-                                        <tr>
-                                            <td>@item.RoomNumber</td>
-                                            <td>@item.RoomType</td>
-                                            <td>@item.CheckIn.ToString("yyyy-MM-dd")</td>
-                                            <td>@item.CheckOut.ToString("yyyy-MM-dd")</td>
-                                            <td>@item.TotalPrice.ToString("F2") EGP</td>
-                                            <td class="text-end">
-                                                @if (item.CanCancel)
-                                                {
-                                                    <form method="post" asp-action="CancelBooking" style="display:inline;">
-                                                        @Html.AntiForgeryToken()
-                                                        <input type="hidden" name="bookingId" value="@item.BookingId" />
-                                                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
-                                                    </form>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">—</span>
-                                                }
-                                            </td>
-                                        </tr>
+                                        @foreach (var reservationItem in item.Items)
+                                        {
+                                            <tr>
+                                                <td>@reservationItem.Room.RoomNumber</td>
+                                                <td>@reservationItem.Room.RoomType.Name</td>
+                                                <td>@reservationItem.CheckIn.ToString("yyyy-MM-dd")</td>
+                                                <td>@reservationItem.CheckOut.ToString("yyyy-MM-dd")</td>
+                                                <td>@reservationItem.TotalPrice.ToString("F2") EGP</td>
+                                                <td class="text-end">
+                                                    <!-- يمكن إضافة زر لإلغاء الحجز أو أي عملية أخرى هنا -->
+                                                </td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
                         </div>
+                    
+                    
 
                         <!-- Pagination -->
                         <nav aria-label="Page navigation">
