@@ -56,7 +56,7 @@ namespace Bookify.Web.Controllers
      .Include(r => r.Items)
          .ThenInclude(i => i.Room)
              .ThenInclude(rt => rt.RoomType)
-     .Where(r => r.UserId == user.Id)
+     .Where(r => r.UserId == User.Identity.Name)
      .AsQueryable();   // important
 
             if (!string.IsNullOrEmpty(search))

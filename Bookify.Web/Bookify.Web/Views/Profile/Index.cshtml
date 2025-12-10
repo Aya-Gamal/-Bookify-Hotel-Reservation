@@ -90,30 +90,28 @@
                             <table class="table align-middle">
                                 <thead class="table-dark">
                                     <tr>
-                                        <th>Room</th>
-                                        <th>Type</th>
-                                        <th>Check In</th>
-                                        <th>Check Out</th>
+                                        <th>Id</th>
+                                        <th>Date</th>
                                         <th>Total</th>
+                                        <th>Payment</th>
                                         <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model.Reservations)
                                     {
-                                        @foreach (var reservationItem in item.Items)
-                                        {
-                                            <tr>
-                                                <td>@reservationItem.Room.RoomNumber</td>
-                                                <td>@reservationItem.Room.RoomType.Name</td>
-                                                <td>@reservationItem.CheckIn.ToString("yyyy-MM-dd")</td>
-                                                <td>@reservationItem.CheckOut.ToString("yyyy-MM-dd")</td>
-                                                <td>@reservationItem.TotalPrice.ToString("F2") EGP</td>
-                                                <td class="text-end">
-                                                    <!-- يمكن إضافة زر لإلغاء الحجز أو أي عملية أخرى هنا -->
-                                                </td>
-                                            </tr>
-                                        }
+                                        <tr>
+                                            <td>@item.Id</td>
+                                            <td>@item.CreatedAt</td>
+                                            <td>@item.TotalAmount</td>
+                                            <td>@item.Status</td>
+                                            <td>
+                                                <a asp-controller="Bookings" a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm">View</a>
+                                                <a asp-controller="Bookings" a asp-action="DeleteBooking" asp-route-id="@item.Id" class="btn btn-danger btn-sm"
+                                                   onclick="return confirm('Are you sure you want to delete this booking?');">Delete</a>
+                                            </td>
+                                        </tr>
+                                      
                                     }
                                 </tbody>
                             </table>
